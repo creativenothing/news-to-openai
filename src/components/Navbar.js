@@ -1,6 +1,8 @@
+import { ReactComponent as Twitter } from "../img/twitter.svg"
+
 const Navbar = props => {
 	return (
-		<nav>
+		<nav data-theme="light">
 			<ul>
 				<li>
 					<strong>Tiqqun Twitter AI</strong>
@@ -8,7 +10,7 @@ const Navbar = props => {
 			</ul>
 			<ul>
 				<li>
-					<a href="https://twitter.com/chaoticautomata">twitter</a>
+					<Twitter />
 				</li>
 			</ul>
 		</nav>

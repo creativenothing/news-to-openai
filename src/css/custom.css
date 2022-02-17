@@ -35,6 +35,10 @@
 	min-height: 5em;
 }
 
+.tweetlist {
+	text-align: left;
+	min-height: 5em;
+}
 *::-webkit-scrollbar,
 *::-webkit-scrollbar-thumb {
 	width: 26px;
