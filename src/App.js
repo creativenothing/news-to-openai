@@ -1,24 +1,27 @@
 import React, { useState, useEffect, useRef } from "react"
 import axios from "axios"
 
-import { Triangle } from "react-loader-spinner"
 import Navbar from "./components/Navbar"
+import {
+	Modal,
+	ModalFooter,
+	NewsModal,
+	TweetModal,
+	NewsList,
+	TweetList
+} from "./components/Modals"
+
+import { Triangle } from "react-loader-spinner"
 import { ReactComponent as Twitter } from "./img/twitter.svg"
 import { ReactComponent as X } from "./img/x.svg"
 import { ReactComponent as Edit } from "./img/edit-2.svg"
-const API_PATH = "http://192.168.1.190:8000/api/"
 
-const TweetList = ({ tweetlist, setDetail }) => {
-	return (
-		<ul>
-			{tweetlist.map((t, i) => (
-				<li key={i} onClick={e => setDetail(e.target.innerText)}>
-					{t}
-				</li>
-			))}
-		</ul>
-	)
-}
+import news from "./news.json"
+
+const API_PATH = "http://192.168.1.190:8000/api/"
+const NEWS_API_PATH = "https://newsdata.io/api/1/news/"
+const NEWS_API_KEY = process.env.REACT_APP_KEY
+const params = { apiKey: NEWS_API_KEY, language: "en", category: "politics" }
 
 const Loading = () => {
 	return (
@@ -43,52 +46,14 @@ const Error = ({ setError }) => {
 	)
 }
 
-const Detail = ({ detail, setDetail }) => {
-	const dialogRef = useRef(null)
-	const articleRef = useRef(null)
-	const click = e => {
-		if (!articleRef.current.contains(e.target)) {
-			closeDetail()
-		}
-	}
-	useEffect(() => {
-		if (!dialogRef.current.open && detail.length > 0) {
-			dialogRef.current.showModal()
-			document.addEventListener("mousedown", click)
-		}
-	})
-	const closeDetail = () => {
-		document.removeEventListener("mousedown", click)
-		dialogRef.current.close()
-		setDetail("")
-	}
-	return (
-		<dialog ref={dialogRef}>
-			<article ref={articleRef} style={{ width: "80%" }}>
-				<p>{detail}</p>
-				<div
-					style={{
-						display: "flex",
-						justifyContent: "space-around",
-						marginTop: "3rem",
-						paddingTop: "1rem",
-						borderTop: "1px solid grey"
-					}}
-				>
-					<Twitter onClick={() => alert("You posted to twitter.")} />
-					<Edit />
-					<X onClick={() => closeDetail()} />
-				</div>
-			</article>
-		</dialog>
-	)
-}
-
-const App = ({ theme, setTheme }) => {
-	const [tweetlist, setTweetlist] = useState([])
+const App = () => {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
-	const [detail, setDetail] = useState("")
+	const [newslist, setNewslist] = useState([])
+	const [newsModal, setNewsModal] = useState(false)
+	const [tweetlist, setTweetlist] = useState([])
+	const [tweetModal, setTweetModal] = useState(true)
+	const [tweet, setTweet] = useState()
 
 	const fetchTweets = () => {
 		setLoading(true)
@@ -104,6 +69,11 @@ const App = ({ theme, setTheme }) => {
 				console.log(e)
 			})
 	}
+
+	useEffect(() => {
+		setNewslist(news.results)
+	})
+
 	return (
 		<div className="tiqqun-ai container">
 			<Navbar />
@@ -112,9 +82,19 @@ const App = ({ theme, setTheme }) => {
 			) : error ? (
 				<Error setError={setError} />
 			) : (
-				<TweetList tweetlist={tweetlist} setDetail={setDetail} />
+				<TweetList tweetlist={tweetlist} setTweet={setTweet} />
 			)}
-			<Detail detail={detail} setDetail={setDetail} />
+			<TweetModal
+				tweet={tweet}
+				setTweet={setTweet}
+				isOpen={tweetModal}
+				toggleModal={setTweetModal}
+			/>
+			<NewsModal
+				newslist={newslist}
+				isOpen={newsModal}
+				toggleModal={setNewsModal}
+			/>
 			<button className="secondary" onClick={fetchTweets}>
 				Fetch Tweets
 			</button>
