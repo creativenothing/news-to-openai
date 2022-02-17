@@ -12,7 +12,7 @@ const Navbar = props => {
 			</ul>
 			<ul>
 				<li>
-					<News width={50} onClick={() => setNewsModal(true)} />
+					<News width={50} height={50} onClick={() => setNewsModal(true)} />
 				</li>
 				<li>
 					<Twitter />
