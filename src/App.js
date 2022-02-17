@@ -76,7 +76,8 @@ const App = () => {
 
 	return (
 		<div className="tiqqun-ai container">
-			<Navbar />
+			<Navbar setNewsModal={setNewsModal} />
+
 			{loading ? (
 				<Loading />
 			) : error ? (
