@@ -83,7 +83,11 @@ const App = () => {
 			) : error ? (
 				<Error setError={setError} />
 			) : (
-				<TweetList tweetlist={tweetlist} setTweet={setTweet} />
+				<TweetList
+					tweetlist={tweetlist}
+					toggleModal={setTweetModal}
+					setTweet={setTweet}
+				/>
 			)}
 			<TweetModal
 				tweet={tweet}

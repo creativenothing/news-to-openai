@@ -92,11 +92,15 @@ const NewsList = props => {
 	)
 }
 
-const TweetList = ({ tweetlist, setTweet }) => {
+const TweetList = ({ tweetlist, setTweet, toggleModal }) => {
+	const openModal = tweet => {
+		setTweet(tweet)
+		toggleModal(true)
+	}
 	return (
 		<ul>
 			{tweetlist.map((t, i) => (
-				<li key={i} onClick={e => setTweet(e.target.innerText)}>
+				<li key={i} onClick={e => openModal(e.target.innerText)}>
 					{t}
 				</li>
 			))}
