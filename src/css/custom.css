@@ -19,15 +19,15 @@
 	margin-bottom: 2em;
 }
 
-.tiqqun-ai > ul {
+.list {
 	height: 80%;
 	overflow: auto;
 	color: rgba(0, 0, 0, 0);
-	-webkit-text-fill-color: black;
+	/* -webkit-text-fill-color: black;*/
 	transition: color 0.3s ease;
 }
 
-.tiqqun-ai > ul li {
+.listitem {
 	display: flex;
 	align-items: center;
 	list-style: none;
@@ -51,6 +51,6 @@
 	box-shadow: inset 0 0 0 10px;
 }
 
-.tiqqun-ai > ul:hover {
+.list:hover {
 	color: rgba(0, 0, 0, 0.3);
 }

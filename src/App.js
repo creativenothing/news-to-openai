@@ -52,7 +52,7 @@ const App = () => {
 	const [newslist, setNewslist] = useState([])
 	const [newsModal, setNewsModal] = useState(false)
 	const [tweetlist, setTweetlist] = useState([])
-	const [tweetModal, setTweetModal] = useState(true)
+	const [tweetModal, setTweetModal] = useState(false)
 	const [tweet, setTweet] = useState()
 
 	const fetchTweets = () => {
@@ -73,6 +73,19 @@ const App = () => {
 	useEffect(() => {
 		setNewslist(news.results)
 	})
+
+	const sendSeed = json => {
+		const data = { seed: json }
+		setLoading(true)
+		setNewsModal(false)
+		axios
+			.post(API_PATH, data)
+			.then(({ data }) => {
+				setTweetlist(data)
+				setLoading(false)
+			})
+			.catch(error => console.log(error))
+	}
 
 	return (
 		<div className="tiqqun-ai container">
@@ -99,6 +112,7 @@ const App = () => {
 				newslist={newslist}
 				isOpen={newsModal}
 				toggleModal={setNewsModal}
+				sendSeed={sendSeed}
 			/>
 			<button className="secondary" onClick={fetchTweets}>
 				Fetch Tweets

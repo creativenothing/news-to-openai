@@ -4,6 +4,8 @@ import { ReactComponent as Twitter } from "../img/twitter.svg"
 import { ReactComponent as X } from "../img/x.svg"
 import { ReactComponent as Edit } from "../img/edit-2.svg"
 
+const dark = window.matchMedia("(prefers-color-scheme: dark)").matches
+
 const Modal = props => {
 	const { isOpen, toggleModal } = props
 	const dialogRef = useRef(null)
@@ -32,8 +34,8 @@ const Modal = props => {
 	}
 
 	return (
-		<dialog ref={dialogRef}>
-			<article ref={articleRef} style={{ width: "80%" }}>
+		<dialog ref={dialogRef} style={{ overflow: "hidden" }}>
+			<article ref={articleRef} style={{ width: "90%" }}>
 				{props.children}
 			</article>
 		</dialog>
@@ -82,11 +84,18 @@ const TweetModal = props => {
 }
 
 const NewsList = props => {
-	const { newslist } = props
+	const { newslist, sendSeed } = props
 	return (
-		<ul>
+		<ul className="list">
 			{newslist.map((n, i) => (
-				<li key={i}>{n.title}</li>
+				<li
+					className="listitem"
+					key={i}
+					style={{ minHeight: "5em", color: dark ? "#bbc6ce" : "#415462" }}
+					onClick={e => sendSeed(e.target.innerText)}
+				>
+					{n.title}
+				</li>
 			))}
 		</ul>
 	)
@@ -98,9 +107,14 @@ const TweetList = ({ tweetlist, setTweet, toggleModal }) => {
 		toggleModal(true)
 	}
 	return (
-		<ul>
+		<ul className="list">
 			{tweetlist.map((t, i) => (
-				<li key={i} onClick={e => openModal(e.target.innerText)}>
+				<li
+					className="listitem"
+					key={i}
+					style={{ color: dark ? "#bbc6ce" : "#415462" }}
+					onClick={e => openModal(e.target.innerText)}
+				>
 					{t}
 				</li>
 			))}
