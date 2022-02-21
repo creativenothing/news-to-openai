@@ -1,8 +1,9 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import App from "./App"
-import "./css/pico.css"
-import "./css/custom.css"
+import "./assets/css/pico.css"
+import "./assets/css/custom.css"
+import "./assets/css/flexboxgrid.css"
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 
 ReactDOM.render(

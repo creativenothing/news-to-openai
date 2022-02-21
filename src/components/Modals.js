@@ -35,7 +35,7 @@ const Modal = props => {
 
 	return (
 		<dialog ref={dialogRef} style={{ overflow: "hidden" }}>
-			<article ref={articleRef} style={{ width: "90%" }}>
+			<article ref={articleRef} style={{ width: "90%", overflow: "hidden" }}>
 				{props.children}
 			</article>
 		</dialog>
@@ -62,10 +62,24 @@ const NewsModal = props => {
 	const { isOpen, toggleModal } = props
 	return (
 		<Modal isOpen={isOpen} toggleModal={toggleModal}>
-			<NewsList {...props} />
-			<ModalFooter>
-				<X onClick={() => toggleModal(false)} />
-			</ModalFooter>
+			<div
+				style={{ maxHeight: "90vh", display: "flex", flexDirection: "column" }}
+			>
+				<div
+					style={{
+						display: "flex",
+						justifyContent: "space-between",
+						height: "5rem"
+					}}
+				>
+					<hgroup>
+						<h4>Current Headlines </h4>
+						<h6>Select a headline to use as a seed for the bot.</h6>
+					</hgroup>
+					<X onClick={() => toggleModal(false)} />
+				</div>
+				<NewsList {...props} />
+			</div>
 		</Modal>
 	)
 }
@@ -80,24 +94,6 @@ const TweetModal = props => {
 				<X onClick={() => toggleModal()} />
 			</ModalFooter>
 		</Modal>
-	)
-}
-
-const NewsList = props => {
-	const { newslist, sendSeed } = props
-	return (
-		<ul className="list">
-			{newslist.map((n, i) => (
-				<li
-					className="listitem"
-					key={i}
-					style={{ minHeight: "5em", color: dark ? "#bbc6ce" : "#415462" }}
-					onClick={e => sendSeed(e.target.innerText)}
-				>
-					{n.title}
-				</li>
-			))}
-		</ul>
 	)
 }
 

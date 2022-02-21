@@ -1,27 +1,10 @@
-import React, { useState, useEffect, useRef } from "react"
-import axios from "axios"
+import React, { useState, useEffect } from "react"
 
 import Navbar from "./components/Navbar"
-import {
-	Modal,
-	ModalFooter,
-	NewsModal,
-	TweetModal,
-	NewsList,
-	TweetList
-} from "./components/Modals"
+import OpenAI, { fetchOpenAI } from "./components/OpenAI"
+import Headlines, { allNews } from "./components/News/Headlines"
 
 import { Triangle } from "react-loader-spinner"
-import { ReactComponent as Twitter } from "./img/twitter.svg"
-import { ReactComponent as X } from "./img/x.svg"
-import { ReactComponent as Edit } from "./img/edit-2.svg"
-
-import news from "./news.json"
-
-const API_PATH = "http://192.168.1.190:8000/api/"
-const NEWS_API_PATH = "https://newsdata.io/api/1/news/"
-const NEWS_API_KEY = process.env.REACT_APP_KEY
-const params = { apiKey: NEWS_API_KEY, language: "en", category: "politics" }
 
 const Loading = () => {
 	return (
@@ -51,72 +34,43 @@ const App = () => {
 	const [error, setError] = useState(false)
 	const [newslist, setNewslist] = useState([])
 	const [newsModal, setNewsModal] = useState(false)
-	const [tweetlist, setTweetlist] = useState([])
-	const [tweetModal, setTweetModal] = useState(false)
-	const [tweet, setTweet] = useState()
+	const [news, setNews] = useState(true)
+	const [seed, setSeed] = useState("")
+	const [choices, setChoices] = useState([])
 
-	const fetchTweets = () => {
-		setLoading(true)
-		axios
-			.get(API_PATH)
-			.then(({ data }) => {
-				setTweetlist(data)
-				setLoading(false)
-			})
-			.catch(e => {
-				setLoading(false)
-				setError(true)
-				console.log(e)
-			})
+	const handleError = err => {
+		console.log(error)
+		setError(true)
 	}
 
 	useEffect(() => {
-		setNewslist(news.results)
-	})
+		setNewslist(allNews)
+	}, [])
 
-	const sendSeed = json => {
-		const data = { seed: json }
+	const sendSeed = seed => {
+		console.log(seed)
+		setSeed(seed)
 		setLoading(true)
-		setNewsModal(false)
-		axios
-			.post(API_PATH, data)
-			.then(({ data }) => {
-				setTweetlist(data)
-				setLoading(false)
-			})
-			.catch(error => console.log(error))
+		setNews(false)
+		fetchOpenAI(seed).then(({ data, error }) => {
+			error ? handleError(error) : setChoices(data.choices)
+			setLoading(false)
+		})
 	}
 
 	return (
 		<div className="tiqqun-ai container">
-			<Navbar setNewsModal={setNewsModal} />
+			<Navbar newsModal={newsModal} setNewsModal={setNewsModal} />
 
 			{loading ? (
 				<Loading />
 			) : error ? (
 				<Error setError={setError} />
+			) : news ? (
+				<Headlines newslist={newslist} sendSeed={sendSeed} />
 			) : (
-				<TweetList
-					tweetlist={tweetlist}
-					toggleModal={setTweetModal}
-					setTweet={setTweet}
-				/>
+				<OpenAI seed={seed} choices={choices} />
 			)}
-			<TweetModal
-				tweet={tweet}
-				setTweet={setTweet}
-				isOpen={tweetModal}
-				toggleModal={setTweetModal}
-			/>
-			<NewsModal
-				newslist={newslist}
-				isOpen={newsModal}
-				toggleModal={setNewsModal}
-				sendSeed={sendSeed}
-			/>
-			<button className="secondary" onClick={fetchTweets}>
-				Fetch Tweets
-			</button>
 		</div>
 	)
 }

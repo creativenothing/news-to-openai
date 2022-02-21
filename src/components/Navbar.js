@@ -1,5 +1,5 @@
-import { ReactComponent as Twitter } from "../img/twitter.svg"
-import { ReactComponent as News } from "../img/news.svg"
+import { ReactComponent as Twitter } from "../assets/img/twitter.svg"
+import { ReactComponent as News } from "../assets/img/news.svg"
 
 const Navbar = props => {
 	const { setNewsModal } = props
