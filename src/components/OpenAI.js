@@ -1,4 +1,7 @@
-const axios = require("axios")
+import { useState } from "react"
+import TweetModal from "./TweetModal"
+
+import axios from "axios"
 
 const dark = window.matchMedia("(prefers-color-scheme: dark)").matches
 
@@ -30,34 +33,44 @@ const fetchOpenAI = seed => {
 		})
 		.catch(error => ({ data: null, error }))
 }
-const OpenAIList = props => {
-	const { choices } = props
-	return (
-		<ul
-			className="list"
-			style={{
-				overflow: "auto"
-			}}
-		>
-			{choices.map((c, i) => (
-				<li
-					className="listitem"
-					key={i}
-					style={{ minHeight: "5em", color: dark ? "#bbc6ce" : "#415462" }}
-					onClick={e => console.log(e.target.innerText)}
-				>
-					{c.text}
-				</li>
-			))}
-		</ul>
-	)
-}
+
 const OpenAI = props => {
+	const [showModal, setShowModal] = useState(false)
+	const [tweet, setTweet] = useState("")
+
 	const { seed, choices } = props
+
+	const handleClick = choice => {
+		setTweet(choice)
+		setShowModal(true)
+	}
+
 	return (
 		<div>
 			<article>{seed}</article>
-			<OpenAIList choices={choices} />
+			<ul
+				className="list"
+				style={{
+					overflow: "auto"
+				}}
+			>
+				{choices.map((c, i) => (
+					<li
+						className="listitem"
+						key={i}
+						style={{ minHeight: "5em", color: dark ? "#bbc6ce" : "#415462" }}
+						onClick={e => handleClick(e.target.innerText)}
+					>
+						{c.text}
+					</li>
+				))}
+			</ul>
+			<TweetModal
+				isOpen={showModal}
+				toggleModal={setShowModal}
+				tweet={tweet}
+				setTweet={setTweet}
+			/>
 		</div>
 	)
 }
