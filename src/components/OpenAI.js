@@ -18,12 +18,18 @@ const headers = {
 }
 const config = { headers }
 
-const fetchOpenAI = seed =>
-	axios
-		.post(OPENAI_API_PATH, { prompt: seed, ...data }, config)
-		.then(res => res)
+const fetchOpenAI = seed => {
+	const twitterPrompt =
+		'I saw a news headline today that said: "' +
+		seed +
+		'." So I wrote a funny tweet about it that said: '
+	return axios
+		.post(OPENAI_API_PATH, { prompt: twitterPrompt, ...data }, config)
+		.then(res => {
+			return res
+		})
 		.catch(error => ({ data: null, error }))
-
+}
 const OpenAIList = props => {
 	const { choices } = props
 	return (
