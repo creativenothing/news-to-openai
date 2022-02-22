@@ -1,6 +1,9 @@
 import { useState } from "react"
 import TweetModal from "./TweetModal"
 
+import { ReactComponent as Twitter } from "../assets/img/twitter.svg"
+import { ReactComponent as Edit } from "../assets/img/edit-2.svg"
+
 import axios from "axios"
 
 const dark = window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -45,23 +48,25 @@ const OpenAI = props => {
 		setShowModal(true)
 	}
 
+	const handleUpdate = e => {
+		console.log(e.target)
+		setTweet(e.target.value)
+	}
+
+	const postToTwitter = () => {
+		setShowModal(false)
+	}
 	return (
-		<div>
+		<div className="openai">
 			<article>{seed}</article>
-			<ul
-				className="list"
-				style={{
-					overflow: "auto"
-				}}
-			>
+			<ul className="list-scroll">
 				{choices.map((c, i) => (
-					<li
-						className="listitem"
-						key={i}
-						style={{ minHeight: "5em", color: dark ? "#bbc6ce" : "#415462" }}
-						onClick={e => handleClick(e.target.innerText)}
-					>
-						{c.text}
+					<li key={i} style={{ color: dark ? "#bbc6ce" : "#415462" }}>
+						<p>{c.text}</p>
+						<div>
+							<Twitter onClick={postToTwitter} />
+							<Edit onClick={() => handleClick(c.text)} />
+						</div>
 					</li>
 				))}
 			</ul>
@@ -70,6 +75,7 @@ const OpenAI = props => {
 				toggleModal={setShowModal}
 				tweet={tweet}
 				setTweet={setTweet}
+				postToTwitter={postToTwitter}
 			/>
 		</div>
 	)

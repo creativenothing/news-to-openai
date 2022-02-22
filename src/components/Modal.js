@@ -5,8 +5,6 @@ const Modal = props => {
 	const dialogRef = useRef(null)
 	const articleRef = useRef(null)
 
-	console.log(props, articleRef, dialogRef)
-
 	const click = e => {
 		if (!articleRef.current.contains(e.target)) {
 			closeModal()
