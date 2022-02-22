@@ -14,14 +14,14 @@ const Loading = () => {
 	)
 }
 
-const Error = ({ setError }) => {
+const Error = props => {
 	return (
 		<dialog open>
 			<article>
 				<div
 					aria-label="Close"
 					className="close"
-					onClick={() => setError(false)}
+					onClick={() => console.log("fix this!")}
 				></div>
 				<p>Something went wrong. Please try again.</p>
 			</article>
@@ -30,17 +30,14 @@ const Error = ({ setError }) => {
 }
 
 const App = () => {
-	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState(false)
+	const [component, setComponent] = useState("headlines")
 	const [newslist, setNewslist] = useState([])
-	const [newsModal, setNewsModal] = useState(false)
-	const [news, setNews] = useState(true)
 	const [seed, setSeed] = useState("")
 	const [choices, setChoices] = useState([])
 
 	const handleError = err => {
-		console.log(error)
-		setError(true)
+		console.log(err)
+		setComponent("error")
 	}
 
 	useEffect(() => {
@@ -48,28 +45,33 @@ const App = () => {
 	}, [])
 
 	const sendSeed = seed => {
-		console.log(seed)
 		setSeed(seed)
-		setLoading(true)
-		setNews(false)
+		setComponent("loading")
 		fetchOpenAI(seed).then(({ data, error }) => {
 			error ? handleError(error) : setChoices(data.choices)
-			setLoading(false)
+			setComponent("openai")
 		})
 	}
 
 	return (
 		<div className="tiqqun-ai container">
-			<Navbar newsModal={newsModal} setNewsModal={setNewsModal} />
+			<Navbar setComponent={setComponent} newslist={newslist} />
 
-			{loading ? (
+			{component === "loading" ? (
 				<Loading />
-			) : error ? (
-				<Error setError={setError} />
-			) : news ? (
-				<Headlines newslist={newslist} sendSeed={sendSeed} />
+			) : component === "error" ? (
+				<Error />
+			) : component === "headlines" ? (
+				<Headlines
+					setComponent={setComponent}
+					newslist={newslist}
+					sendSeed={sendSeed}
+					fetchOpenAI={fetchOpenAI}
+				/>
+			) : component === "openai" ? (
+				<OpenAI setComponent={setComponent} seed={seed} choices={choices} />
 			) : (
-				<OpenAI seed={seed} choices={choices} />
+				<div>something is problematic...</div>
 			)}
 		</div>
 	)
