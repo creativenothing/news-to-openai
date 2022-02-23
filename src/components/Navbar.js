@@ -2,7 +2,7 @@ import { ReactComponent as Twitter } from "../assets/img/twitter.svg"
 import { ReactComponent as News } from "../assets/img/news.svg"
 
 const Navbar = props => {
-	const { setNewsModal } = props
+	const { setComponent } = props
 	return (
 		<nav data-theme="light">
 			<ul>
@@ -12,7 +12,11 @@ const Navbar = props => {
 			</ul>
 			<ul>
 				<li>
-					<News width={50} height={50} onClick={() => setNewsModal(true)} />
+					<News
+						width={50}
+						height={50}
+						onClick={() => setComponent("headlines")}
+					/>
 				</li>
 				<li>
 					<Twitter />
