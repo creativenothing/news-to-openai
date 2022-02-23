@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react"
 import Navbar from "./components/Navbar"
 import OpenAI, { fetchOpenAI } from "./components/OpenAI"
 import Headlines, { allNews } from "./components/News/Headlines"
-
+import NewsSearch from "./components/News/NewsSearch"
 import { Triangle } from "react-loader-spinner"
 
 const Loading = () => {
@@ -48,8 +48,11 @@ const App = () => {
 		setSeed(seed)
 		setComponent("loading")
 		fetchOpenAI(seed).then(({ data, error }) => {
-			error ? handleError(error) : setChoices(data.choices)
-			setComponent("openai")
+			if (error) handleError(error)
+			else {
+				setChoices(data.choices)
+				setComponent("openai")
+			}
 		})
 	}
 
@@ -68,6 +71,8 @@ const App = () => {
 					sendSeed={sendSeed}
 					fetchOpenAI={fetchOpenAI}
 				/>
+			) : component === "search" ? (
+				<NewsSearch setComponent={setComponent} />
 			) : component === "openai" ? (
 				<OpenAI setComponent={setComponent} seed={seed} choices={choices} />
 			) : (
