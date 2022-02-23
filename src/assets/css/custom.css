@@ -99,3 +99,33 @@
 	column-gap: 3rem;
 	margin-bottom: 2em;
 }
+
+.headlines {
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	row-gap: 1rem;
+}
+
+.headlines > .main {
+	display: flex;
+	column-gap: 1em;
+}
+
+.headlines h6 {
+	margin-bottom: 1rem;
+}
+
+.headlines p {
+	margin-bottom: 0;
+}
+
+.headlines img {
+	width: 30%;
+}
+
+.headlines .info {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+}
