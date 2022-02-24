@@ -114,15 +114,19 @@ span[role="button"] {
 	padding: 0.1em 0.2em 0.1em 0.2em;
 }
 
-li > p {
-	margin: auto;
-	padding: 1em 0 1em 0;
-}
-
 .loading {
 	margin: 0;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+}
+
+.content li {
+	display: flex;
+}
+
+li > p {
+	margin: auto;
+	padding: 1em 0 1em 0;
 }

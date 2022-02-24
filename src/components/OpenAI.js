@@ -80,10 +80,7 @@ const OpenAI = props => {
 		<Fragment>
 			<ul>
 				{choices.map((c, i) => (
-					<li
-						key={i}
-						style={{ display: "flex", color: dark ? "#bbc6ce" : "#415462" }}
-					>
+					<li key={i} style={{ color: dark ? "#bbc6ce" : "#415462" }}>
 						<Twitter
 							style={{ width: "10%", flexShrink: 0, margin: "auto" }}
 							width="24px"
