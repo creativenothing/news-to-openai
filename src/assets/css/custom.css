@@ -13,6 +13,7 @@ nav {
 }
 
 .content {
+	flex-grow: 1;
 	overflow: auto;
 	color: rgba(0, 0, 0, 0);
 	transition: color 0.3s ease;
@@ -60,10 +61,6 @@ nav {
 
 .headline p {
 	margin-bottom: 0;
-}
-
-.headline img {
-	width: 30%;
 }
 
 .headline .info {
@@ -114,13 +111,4 @@ span[role="button"] {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-}
-
-.content li {
-	display: flex;
-}
-
-li > p {
-	margin: auto;
-	padding: 1em 0 1em 0;
 }

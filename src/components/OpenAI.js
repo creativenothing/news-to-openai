@@ -77,7 +77,10 @@ const OpenAI = props => {
 			{choices.map((c, i) => (
 				<div
 					key={i}
-					style={{ display: "flex", color: dark ? "#bbc6ce" : "#415462" }}
+					style={{
+						display: "flex",
+						color: dark ? "#bbc6ce" : "#415462"
+					}}
 				>
 					<Twitter
 						style={{
@@ -89,7 +92,7 @@ const OpenAI = props => {
 						width="24px"
 						onClick={() => openTweetDetail(c.text)}
 					/>
-					<p>{c.text}</p>
+					<p style={{ flexGrow: 1 }}>{c.text}</p>
 				</div>
 			))}
 			<TweetModal
