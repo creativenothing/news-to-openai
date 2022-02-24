@@ -1,12 +1,13 @@
+import React from "react"
 const dark = window.matchMedia("(prefers-color-scheme: dark)").matches
-const news_dir = require.context("../../data/news", false, /\.json$/)
+const news_dir = require.context("../../data/covid", false, /\.json$/)
 
-const trimTitle = title => title.slice(0, title.lastIndexOf("-") - 1)
-const formatDate = dateString => {
-	const date = new Date(dateString)
-	const month = date.getMonth()
-	console.log(month)
-}
+/*
+ * this isn't working (doing some weird cropping for the gen news titles,
+ * and the covid news titles don't have this problem so removing for now.
+ *
+ * const trimTitle = title => title.slice(0, title.lastIndexOf("-") - 1)
+ */
 
 const findElapsedTime = dateString => {
 	const now = new Date()
@@ -51,48 +52,54 @@ const readNews = r => {
 
 const allNews = readNews(news_dir)
 
-// const fetchNews
-//
-// don't want to write it until production because
-// it will fetch every time it refreshes which wouldn't be good...
-//
-//
-const Headlines = props => {
-	const { newslist, sendSeed } = props
+const sortByDate = newslist => {
+	newslist
+		.map(n => {
+			n.date = new Date(n.publishedAt)
+			return n
+		})
+		.sort((a, b) => {
+			return b.date - a.date
+		})
+}
 
+const Headline = props => {
+	const { article, sendSeed, newslist } = props
 	return (
-		<div>
-			<div>
-				<h4>Current Headlines</h4>
+		<article
+			className="headline"
+			key={article.publishedAt}
+			style={{ color: dark ? "#bbc6ce" : "#415462" }}
+		>
+			<div className="main">
+				<img src={article.urlToImage} alt="" />
+				<div>
+					<h6>{article.source.name}</h6>
+					<p>{article.title}</p>
+				</div>
 			</div>
-			{newslist.map((n, i) => (
-				<article
-					key={i}
-					style={{
-						marginTop: 0,
-						marginBottom: 0,
-						color: dark ? "#bbc6ce" : "#415462"
-					}}
-					onClick={e => sendSeed(n.title)}
-				>
-					<div className="headlines">
-						<div className="main">
-							<img src={n.urlToImage} alt="" />
-							<div>
-								<h6>{n.source.name}</h6>
-								<p>{trimTitle(n.title)}</p>
-							</div>
-						</div>
-						<div className="info">
-							<small>{findElapsedTime(n.publishedAt)}</small>
-						</div>
-					</div>
-				</article>
+			<div className="info">
+				<small>{findElapsedTime(article.publishedAt)}</small>
+				<span role="button" className="contrast outline">
+					<small onClick={e => sendSeed(article.title)}> generate tweets</small>
+				</span>
+			</div>
+		</article>
+	)
+}
+
+const Headlines = props => {
+	const { newslist } = props
+	sortByDate(newslist)
+	return (
+		<React.Fragment>
+			{newslist.map(n => (
+				<Headline key={n.publishedAt} article={n} {...props} />
 			))}
-		</div>
+		</React.Fragment>
 	)
 }
 
 export default Headlines
 
-export { allNews }
+export { allNews, Headline, findElapsedTime }
