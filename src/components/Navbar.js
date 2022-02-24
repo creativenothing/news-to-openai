@@ -3,24 +3,29 @@ import { ReactComponent as News } from "../assets/img/news.svg"
 
 const Navbar = props => {
 	const { setComponent, title } = props
-	console.log(props)
 	return (
-		<nav data-theme="light">
+		<nav>
 			<ul>
 				<li>
-					<strong>{title}</strong>
+					<h4>inhabit ai</h4>
 				</li>
 			</ul>
 			<ul>
 				<li>
-					<News
-						width={50}
-						height={50}
-						onClick={() => setComponent("headlines")}
-					/>
+					<a href="#" onClick={() => setComponent("home")}>
+						home
+					</a>
 				</li>
 				<li>
-					<Twitter />
+					<a href="#" onClick={() => setComponent("headlines")}>
+						headlines
+					</a>
+				</li>
+
+				<li>
+					<a href="#" onClick={() => setComponent("search")}>
+						search
+					</a>
 				</li>
 			</ul>
 		</nav>
