@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 
 import Navbar from "./components/Navbar"
+import Home from "./components/Home"
 import OpenAI, { OpenAIHeadline, fetchOpenAI } from "./components/OpenAI"
 import Headlines, { allNews } from "./components/News/Headlines"
 import NewsSearch from "./components/News/NewsSearch"
@@ -85,6 +86,8 @@ const App = () => {
 					<Loading />
 				) : component === "error" ? (
 					<Error />
+				) : component === "home" ? (
+					<Home />
 				) : component === "headlines" ? (
 					<Headlines
 						setComponent={setComponent}
