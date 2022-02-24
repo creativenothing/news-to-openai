@@ -27,6 +27,11 @@ const Navbar = props => {
 						search
 					</a>
 				</li>
+				<li>
+					<a href="#" onClick={() => setComponent("openai")}>
+						results
+					</a>
+				</li>
 			</ul>
 		</nav>
 	)

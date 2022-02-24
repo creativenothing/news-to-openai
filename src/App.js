@@ -33,6 +33,17 @@ const Error = props => {
 	)
 }
 
+const EmptyResults = props => {
+	return (
+		<div>
+			<p>
+				You have not generated any tweets, yet. When you do, they will appear
+				here.
+			</p>
+		</div>
+	)
+}
+
 const App = () => {
 	const [component, setComponent] = useState("headlines")
 	const [newslist, setNewslist] = useState([])
@@ -75,7 +86,7 @@ const App = () => {
 		<main className="container-fluid">
 			<Navbar title={title} setComponent={setComponent} newslist={newslist} />
 			<div>
-				{component === "openai" ? (
+				{component === "openai" && choices.length > 0 ? (
 					<OpenAIHeadline article={newslist.find(n => n.title === seed)} />
 				) : (
 					<div />
@@ -97,11 +108,15 @@ const App = () => {
 				) : component === "search" ? (
 					<NewsSearch setComponent={setComponent} />
 				) : component === "openai" ? (
-					<OpenAI
-						article={newslist.find(n => n.title === seed)}
-						seed={seed}
-						choices={choices}
-					/>
+					choices.length === 0 ? (
+						<EmptyResults />
+					) : (
+						<OpenAI
+							article={newslist.find(n => n.title === seed)}
+							seed={seed}
+							choices={choices}
+						/>
+					)
 				) : (
 					<div>something is problematic...</div>
 				)}
