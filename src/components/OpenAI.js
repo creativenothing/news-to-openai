@@ -39,12 +39,8 @@ const fetchOpenAI = seed => {
 const OpenAIHeadline = props => {
 	const { article, sendSeed, newslist } = props
 	return (
-		<article
-			className="headline"
-			style={{ color: dark ? "#bbc6ce" : "#415462" }}
-		>
+		<div className="headline" style={{ color: dark ? "#bbc6ce" : "#415462" }}>
 			<div className="main">
-				<img src={article.urlToImage} alt="" />
 				<div>
 					<h6>{article.source.name}</h6>
 					<p>{article.title}</p>
@@ -53,7 +49,7 @@ const OpenAIHeadline = props => {
 			<div className="info">
 				<small>{findElapsedTime(article.publishedAt)}</small>
 			</div>
-		</article>
+		</div>
 	)
 }
 
@@ -78,18 +74,24 @@ const OpenAI = props => {
 	}
 	return (
 		<Fragment>
-			<ul>
-				{choices.map((c, i) => (
-					<li key={i} style={{ color: dark ? "#bbc6ce" : "#415462" }}>
-						<Twitter
-							style={{ width: "10%", flexShrink: 0, margin: "auto" }}
-							width="24px"
-							onClick={() => openTweetDetail(c.text)}
-						/>
-						<p>{c.text}</p>
-					</li>
-				))}
-			</ul>
+			{choices.map((c, i) => (
+				<div
+					key={i}
+					style={{ display: "flex", color: dark ? "#bbc6ce" : "#415462" }}
+				>
+					<Twitter
+						style={{
+							width: "10%",
+							flexShrink: 0,
+							margin: "auto",
+							paddingRight: "1em"
+						}}
+						width="24px"
+						onClick={() => openTweetDetail(c.text)}
+					/>
+					<p>{c.text}</p>
+				</div>
+			))}
 			<TweetModal
 				isOpen={showModal}
 				toggleModal={setShowModal}
