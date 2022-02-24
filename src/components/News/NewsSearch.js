@@ -1,20 +1,21 @@
 import { useState } from "react"
-import { Modal } from "./Modals"
-import { ReactComponent as X } from "../img/x.svg"
+import Modal from "../Modal"
+import { ReactComponent as X } from "../../assets/img/x.svg"
 
-import ISOcountries from "../countries.json"
+import ISOcountries from "../../data/countries.json"
 
 const NewsSearch = props => {
-	const [country, setCountry] = useState(false)
-	const [selected, select] = useState([])
+	const [showModal, setShowModal] = useState(false)
+	const [countries, setCountries] = useState([])
 	const countryString =
-		selected.length === 0 ? "Worldwide" : selected.map(c => c.Name + ", ")
+		countries.length === 0 ? "Worldwide" : countries.map(c => c.Name + ", ")
 
-	const addCountry = ctry => select([...selected, ctry])
-	const delCountry = ctry => select(selected.filter(c => c.Code !== ctry.Code))
+	const addCountry = ctry => setCountries([...countries, ctry])
+	const delCountry = ctry =>
+		setCountries(countries.filter(c => c.Code !== ctry.Code))
 
 	const handleSelect = ctry => {
-		selected.includes(ctry.Code) ? addCountry(ctry) : delCountry(ctry)
+		countries.includes(ctry.Code) ? delCountry(ctry) : addCountry(ctry)
 	}
 	return (
 		<div>
@@ -25,7 +26,11 @@ const NewsSearch = props => {
 					style={{ paddingTop: "2rem", paddingLeft: "1rem" }}
 				>
 					<div className="col-xs-6 middle-xs">
-						<a href="#" className="secondary" onClick={() => setCountry(true)}>
+						<a
+							href="#"
+							className="secondary"
+							onClick={() => setShowModal(true)}
+						>
 							Countries
 						</a>
 					</div>
@@ -35,8 +40,8 @@ const NewsSearch = props => {
 				</div>
 			</details>
 			<NewsSearchModal
-				isOpen={country}
-				toggleModal={setCountry}
+				isOpen={showModal}
+				toggleModal={setShowModal}
 				handleSelect={handleSelect}
 			/>
 		</div>
