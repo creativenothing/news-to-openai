@@ -2,12 +2,13 @@ import { ReactComponent as Twitter } from "../assets/img/twitter.svg"
 import { ReactComponent as News } from "../assets/img/news.svg"
 
 const Navbar = props => {
-	const { setComponent } = props
+	const { setComponent, title } = props
+	console.log(props)
 	return (
 		<nav data-theme="light">
 			<ul>
 				<li>
-					<strong>Tiqqun Twitter AI</strong>
+					<strong>{title}</strong>
 				</li>
 			</ul>
 			<ul>
