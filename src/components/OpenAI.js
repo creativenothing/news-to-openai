@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import TweetModal from "./TweetModal"
+import { HeadLine, findElapsedTime } from "./News/Headlines.js"
 
 import { ReactComponent as Twitter } from "../assets/img/twitter.svg"
 import { ReactComponent as Edit } from "../assets/img/edit-2.svg"
@@ -31,42 +32,64 @@ const fetchOpenAI = seed => {
 		'." So I wrote a funny tweet about it that said: '
 	return axios
 		.post(OPENAI_API_PATH, { prompt: twitterPrompt, ...data }, config)
-		.then(res => {
-			return res
-		})
+		.then(res => res)
 		.catch(error => ({ data: null, error }))
+}
+
+const OpenAIHeadline = props => {
+	const { article, sendSeed, newslist } = props
+	return (
+		<article
+			className="headline"
+			style={{ color: dark ? "#bbc6ce" : "#415462" }}
+		>
+			<div className="main">
+				<img src={article.urlToImage} alt="" />
+				<div>
+					<h6>{article.source.name}</h6>
+					<p>{article.title}</p>
+				</div>
+			</div>
+			<div className="info">
+				<small>{findElapsedTime(article.publishedAt)}</small>
+			</div>
+		</article>
+	)
 }
 
 const OpenAI = props => {
 	const [showModal, setShowModal] = useState(false)
 	const [tweet, setTweet] = useState("")
 
-	const { seed, choices } = props
+	const { article, choices } = props
 
-	const handleClick = choice => {
+	const openTweetDetail = choice => {
 		setTweet(choice)
 		setShowModal(true)
 	}
 
 	const handleUpdate = e => {
-		console.log(e.target)
 		setTweet(e.target.value)
 	}
 
-	const postToTwitter = () => {
+	const postToTwitter = tweet => {
+		alert("You posted to twitter:\n\n" + tweet)
 		setShowModal(false)
 	}
 	return (
-		<div className="openai">
-			<article>{seed}</article>
-			<ul className="list-scroll">
+		<Fragment>
+			<ul>
 				{choices.map((c, i) => (
-					<li key={i} style={{ color: dark ? "#bbc6ce" : "#415462" }}>
+					<li
+						key={i}
+						style={{ display: "flex", color: dark ? "#bbc6ce" : "#415462" }}
+					>
+						<Twitter
+							style={{ width: "10%", flexShrink: 0, margin: "auto" }}
+							width="24px"
+							onClick={() => openTweetDetail(c.text)}
+						/>
 						<p>{c.text}</p>
-						<div>
-							<Twitter onClick={postToTwitter} />
-							<Edit onClick={() => handleClick(c.text)} />
-						</div>
 					</li>
 				))}
 			</ul>
@@ -77,9 +100,9 @@ const OpenAI = props => {
 				setTweet={setTweet}
 				postToTwitter={postToTwitter}
 			/>
-		</div>
+		</Fragment>
 	)
 }
 
 export default OpenAI
-export { fetchOpenAI }
+export { OpenAIHeadline, fetchOpenAI }
