@@ -12,14 +12,7 @@ nav {
 	flex-shrink: 0;
 }
 
-nav li {
-	padding-top: 0px;
-	padding-bottom: 0px;
-}
-
 .content {
-	padding: 1em;
-	flex-grow: 1;
 	overflow: auto;
 	color: rgba(0, 0, 0, 0);
 	transition: color 0.3s ease;
@@ -31,7 +24,7 @@ nav li {
 
 *::-webkit-scrollbar,
 *::-webkit-scrollbar-thumb {
-	width: 26px;
+	/*width: 26px;*/ /* hide scrollbar; need the width but leaving for reference*/
 	border-radius: 13px;
 	background-clip: padding-box;
 	border: 10px solid transparent;
@@ -44,11 +37,12 @@ nav li {
 .headline {
 	display: flex;
 	flex-direction: column;
-	row-gap: 1em;
+	row-gap: 0.5em;
 	flex-grow: 1;
 	margin: 0;
 	padding-top: 0.75em;
-	padding-bottom: 0.75em;
+	padding-bottom: 1em;
+	border-bottom: 1px solid;
 }
 
 .headline img {
