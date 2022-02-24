@@ -1,3 +1,4 @@
+import { Fragment } from "react"
 import * as hero from "../assets/img/hero"
 import quotes from "../data/quotes.json"
 
@@ -8,7 +9,7 @@ const Home = props => {
 	const { setComponent } = props
 	const quote = quotes[Math.floor(Math.random() * quotes.length)]
 	return (
-		<div>
+		<Fragment>
 			<h4>Instructions</h4>
 			<p>
 				I am a bot that reads current news headlines and generates pithy tweets
@@ -19,17 +20,13 @@ const Home = props => {
 				<a href="#" onClick={() => setComponent("home")}>
 					headlines
 				</a>{" "}
-				to generate a selection of tweets from a current news headline, or use
-				<a href="#" onClick={() => setComponent("search")}>
-					{" "}
-					search
-				</a>{" "}
-				to search for a specific topic.
+				to generate a selection of tweets from a current news headline.
 			</p>
 			<hr />
-			<img src={selectedImage} className="avatar" alt="" />
-			<blockquote>{quote} </blockquote>
-		</div>
+			<blockquote>
+				<em>{quote}</em>
+			</blockquote>
+		</Fragment>
 	)
 }
 

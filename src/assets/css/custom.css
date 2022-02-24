@@ -17,6 +17,8 @@ nav {
 	overflow: auto;
 	color: rgba(0, 0, 0, 0);
 	transition: color 0.3s ease;
+	max-width: 700px;
+	margin: 0 auto;
 }
 
 .content:hover {
@@ -117,4 +119,8 @@ select,
 textarea {
 	padding: 0;
 	margin: 0;
+}
+
+hr {
+	margin-top: 6em;
 }
