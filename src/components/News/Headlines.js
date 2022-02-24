@@ -30,7 +30,7 @@ const sortByDate = newslist => {
 
 const Headlines = props => {
 	const { newslist } = props
-	//sortByDate(newslist)
+	sortByDate(newslist)
 	return (
 		<React.Fragment>
 			{newslist.map(n => (
