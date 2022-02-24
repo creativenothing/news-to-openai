@@ -5,7 +5,7 @@ import Home from "./components/Home"
 import OpenAI, { OpenAIHeadline, fetchOpenAI } from "./components/OpenAI"
 import Headlines, { allNews } from "./components/News/Headlines"
 import NewsSearch from "./components/News/NewsSearch"
-import { Triangle } from "react-loader-spinner"
+import { ReactComponent as Search } from "./assets/img/search.svg"
 
 const Loading = () => {
 	return (
@@ -49,6 +49,7 @@ const App = () => {
 	const [newslist, setNewslist] = useState([])
 	const [seed, setSeed] = useState("")
 	const [choices, setChoices] = useState([])
+	const [search, setSearch] = useState([])
 
 	const findPageTitle = () => {
 		switch (component) {
@@ -64,6 +65,10 @@ const App = () => {
 	const handleError = err => {
 		console.log(err)
 		setComponent("error")
+	}
+
+	const handleSearch = e => {
+		setSearch(e.target.value)
 	}
 
 	useEffect(() => {
@@ -88,6 +93,16 @@ const App = () => {
 			<div>
 				{component === "openai" && choices.length > 0 ? (
 					<OpenAIHeadline article={newslist.find(n => n.title === seed)} />
+				) : component === "headlines" ? (
+					<div style={{ display: "flex", alignItems: "center" }}>
+						<Search />
+						<input
+							name="search"
+							value={search}
+							onChange={handleSearch}
+							placeholder="search for keywords"
+						/>
+					</div>
 				) : (
 					<div />
 				)}
