@@ -94,7 +94,13 @@ const App = () => {
 				{component === "openai" && choices.length > 0 ? (
 					<OpenAIHeadline article={newslist.find(n => n.title === seed)} />
 				) : component === "headlines" ? (
-					<div style={{ display: "flex", alignItems: "center" }}>
+					<div
+						style={{
+							display: "flex",
+							justifyContent: "space-between",
+							alignItems: "center"
+						}}
+					>
 						<Search />
 						<input
 							name="search"
@@ -102,6 +108,10 @@ const App = () => {
 							onChange={handleSearch}
 							placeholder="search for keywords"
 						/>
+
+						<span role="button" className="secondary outline">
+							fetch current
+						</span>
 					</div>
 				) : (
 					<div />
