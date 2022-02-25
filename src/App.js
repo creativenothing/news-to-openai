@@ -18,13 +18,14 @@ const Loading = () => {
 }
 
 const Error = props => {
+	const { setComponent } = props
 	return (
 		<dialog open>
 			<article>
 				<div
 					aria-label="Close"
 					className="close"
-					onClick={() => alert("fix this!")}
+					onClick={() => setComponent("home")}
 				></div>
 				<p>Something went wrong. Please try again.</p>
 			</article>
@@ -44,7 +45,7 @@ const EmptyResults = props => {
 }
 
 const App = () => {
-	const [component, setComponent] = useState("home")
+	const [component, setComponent] = useState("error")
 	const [newslist, setNewslist] = useState([])
 	const [seed, setSeed] = useState("")
 	const [choices, setChoices] = useState([])
@@ -107,7 +108,7 @@ const App = () => {
 				{component === "loading" ? (
 					<Loading />
 				) : component === "error" ? (
-					<Error />
+					<Error setComponent={setComponent} />
 				) : component === "home" ? (
 					<Home />
 				) : component === "headlines" ? (
