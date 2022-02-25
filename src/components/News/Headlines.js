@@ -15,18 +15,15 @@ const readNews = r => {
 	return results
 }
 
-const allNews = readNews(news_dir)
-
-const sortByDate = newslist => {
+const sortByDate = newslist =>
 	newslist
 		.map(n => {
 			n.date = new Date(n.publishedAt)
 			return n
 		})
-		.sort((a, b) => {
-			return b.date - a.date
-		})
-}
+		.sort((a, b) => b.date - a.date)
+
+const allNews = sortByDate(readNews(news_dir))
 
 const SearchBar = props => {
 	const { handleChange, handleSubmit, search } = props
