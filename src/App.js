@@ -3,9 +3,8 @@ import React, { useState, useEffect } from "react"
 import Navbar from "./components/Navbar"
 import Home from "./components/Home"
 import OpenAI, { OpenAIHeadline, fetchOpenAI } from "./components/OpenAI"
-import Headlines, { allNews } from "./components/News/Headlines"
+import Headlines, { HeadlineFilter, allNews } from "./components/News/Headlines"
 import NewsSearch from "./components/News/NewsSearch"
-import { ReactComponent as Search } from "./assets/img/search.svg"
 
 const Loading = () => {
 	return (
@@ -67,10 +66,6 @@ const App = () => {
 		setComponent("error")
 	}
 
-	const handleSearch = e => {
-		setSearch(e.target.value)
-	}
-
 	useEffect(() => {
 		setNewslist(allNews)
 	}, [])
@@ -86,6 +81,16 @@ const App = () => {
 			}
 		})
 	}
+
+	const filterNews = keywords => {
+		const keywordArray = keywords.toLowerCase().replace(",", " ").split(" ")
+		const filteredNews = allNews.filter(n =>
+			keywordArray.some(word => n.description.toLowerCase().includes(word))
+		)
+		setNewslist(filteredNews)
+	}
+	const clearFilter = () => setNewslist(allNews)
+
 	const title = findPageTitle()
 	return (
 		<main className="container-fluid">
@@ -94,25 +99,7 @@ const App = () => {
 				{component === "openai" && choices.length > 0 ? (
 					<OpenAIHeadline article={newslist.find(n => n.title === seed)} />
 				) : component === "headlines" ? (
-					<div
-						style={{
-							display: "flex",
-							justifyContent: "space-between",
-							alignItems: "center"
-						}}
-					>
-						<Search />
-						<input
-							name="search"
-							value={search}
-							onChange={handleSearch}
-							placeholder="search for keywords"
-						/>
-
-						<span role="button" className="secondary outline">
-							fetch current
-						</span>
-					</div>
+					<HeadlineFilter clearFilter={clearFilter} filterNews={filterNews} />
 				) : (
 					<div />
 				)}

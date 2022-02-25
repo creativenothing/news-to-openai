@@ -126,3 +126,9 @@ textarea {
 hr {
 	margin-top: 6em;
 }
+
+form {
+	display: flex;
+	align-items: center;
+	margin: 0;
+}
