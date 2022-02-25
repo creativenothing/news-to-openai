@@ -48,7 +48,6 @@ const App = () => {
 	const [newslist, setNewslist] = useState([])
 	const [seed, setSeed] = useState("")
 	const [choices, setChoices] = useState([])
-	const [search, setSearch] = useState([])
 
 	const findPageTitle = () => {
 		switch (component) {

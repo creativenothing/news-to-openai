@@ -3,7 +3,7 @@ import findElapsedTime from "../../utils/findElapsedTime"
 const dark = window.matchMedia("(prefers-color-scheme: dark)").matches
 
 const Headline = props => {
-	const { article, sendSeed, newslist } = props
+	const { article, sendSeed } = props
 	return (
 		<div
 			className="headline"

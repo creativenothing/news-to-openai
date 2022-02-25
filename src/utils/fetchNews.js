@@ -1,4 +1,3 @@
-const slugify = require("react-slugify").default
 const axios = require("axios")
 
 const NEWS_API_PATH = "https://newsapi.org/v2/top-headlines"

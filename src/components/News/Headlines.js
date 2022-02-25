@@ -1,8 +1,6 @@
 import React, { useState } from "react"
-import axios from "axios"
 
 import Headline from "./Headline"
-import { fetchNews } from "../../utils/fetchNews"
 import { ReactComponent as Search } from "../../assets/img/search.svg"
 import findElapsedTime from "../../utils/findElapsedTime"
 
@@ -31,7 +29,7 @@ const sortByDate = newslist => {
 }
 
 const SearchBar = props => {
-	const { filterNews, handleChange, handleSubmit, search } = props
+	const { handleChange, handleSubmit, search } = props
 
 	return (
 		<form onSubmit={handleSubmit}>
