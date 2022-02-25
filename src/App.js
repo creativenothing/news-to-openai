@@ -45,7 +45,7 @@ const EmptyResults = props => {
 }
 
 const App = () => {
-	const [component, setComponent] = useState("error")
+	const [component, setComponent] = useState("home")
 	const [newslist, setNewslist] = useState([])
 	const [seed, setSeed] = useState("")
 	const [choices, setChoices] = useState([])
