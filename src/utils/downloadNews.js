@@ -19,7 +19,7 @@ const saveArticle = article => {
 	article.id = id
 	id++
 	const slug = slugify(article.title)
-	const filepath = __dirname + "/../data/news" + slug + ".json"
+	const filepath = __dirname + "/../data/news/" + slug + ".json"
 	fs.writeFileSync(filepath, JSON.stringify(article))
 }
 
