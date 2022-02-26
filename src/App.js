@@ -84,9 +84,12 @@ const App = () => {
 
 	const filterNews = keywords => {
 		const keywordArray = keywords.toLowerCase().replace(",", " ").split(" ")
-		const filteredNews = allNews.filter(n =>
-			keywordArray.some(word => n.description.toLowerCase().includes(word))
-		)
+		const filteredNews = allNews.filter(n => {
+			if (!n.description) return
+			return keywordArray.some(word =>
+				n.description.toLowerCase().includes(word)
+			)
+		})
 		setNewslist(filteredNews)
 	}
 	const clearFilter = () => setNewslist(allNews)
