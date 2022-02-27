@@ -57,17 +57,6 @@ const App = () => {
 	const [seed, setSeed] = useState("")
 	const [choices, setChoices] = useState([])
 
-	const findPageTitle = () => {
-		switch (component) {
-			case "openai":
-				return "Open AI"
-			case "headlines":
-				return "Headlines"
-			default:
-				return ""
-		}
-	}
-
 	const handleError = err => {
 		console.log(err)
 		setComponent("error")
@@ -103,10 +92,9 @@ const App = () => {
 	const removeFromChoices = index => {
 		setChoices(choices.filter(c => c.index !== index))
 	}
-	const title = findPageTitle()
 	return (
 		<main className="container-fluid">
-			<Navbar title={title} setComponent={setComponent} newslist={newslist} />
+			<Navbar setComponent={setComponent} newslist={newslist} />
 			<div>
 				{component === "openai" && choices.length > 0 ? (
 					<OpenAIHeadline article={newslist.find(n => n.title === seed)} />
