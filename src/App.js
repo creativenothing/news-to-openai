@@ -2,9 +2,16 @@ import React, { useState, useEffect } from "react"
 
 import Navbar from "./components/Navbar"
 import Home from "./components/Home"
-import OpenAI, { OpenAIHeadline, fetchOpenAI } from "./components/OpenAI"
+import OpenAI, { OpenAIHeadline } from "./components/OpenAI"
 import Headlines, { HeadlineFilter, allNews } from "./components/News/Headlines"
 import NewsSearch from "./components/News/NewsSearch"
+import openairequest from "./data/openairequest"
+
+const fetchOpenAIDev = () =>
+	new Promise(resolve => resolve({ data: openairequest }))
+const fetchOpenAIProd = require("./components/OpenAI").fetchOpenAI
+const fetchOpenAI =
+	process.env.NODE_ENV === "production" ? fetchOpenAIProd : fetchOpenAIDev
 
 const Loading = () => {
 	return (
@@ -81,7 +88,6 @@ const App = () => {
 			}
 		})
 	}
-
 	const filterNews = keywords => {
 		const keywordArray = keywords.toLowerCase().replace(",", " ").split(" ")
 		const filteredNews = allNews.filter(n => {
@@ -94,6 +100,9 @@ const App = () => {
 	}
 	const clearFilter = () => setNewslist(allNews)
 
+	const removeFromChoices = index => {
+		setChoices(choices.filter(c => c.index !== index))
+	}
 	const title = findPageTitle()
 	return (
 		<main className="container-fluid">
@@ -113,7 +122,7 @@ const App = () => {
 				) : component === "error" ? (
 					<Error setComponent={setComponent} />
 				) : component === "home" ? (
-					<Home />
+					<Home setComponent={setComponent} />
 				) : component === "headlines" ? (
 					<Headlines
 						setComponent={setComponent}
@@ -130,6 +139,7 @@ const App = () => {
 							article={newslist.find(n => n.title === seed)}
 							seed={seed}
 							choices={choices}
+							removeFromChoices={removeFromChoices}
 						/>
 					)
 				) : (

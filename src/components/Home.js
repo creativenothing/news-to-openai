@@ -17,7 +17,7 @@ const Home = props => {
 			</p>
 			<p>
 				View{" "}
-				<a href="#" onClick={() => setComponent("home")}>
+				<a href="#" onClick={() => setComponent("headlines")}>
 					headlines
 				</a>{" "}
 				to generate a selection of tweets from a current news headline.

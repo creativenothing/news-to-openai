@@ -4,7 +4,7 @@ import { HeadLine, findElapsedTime } from "./News/Headlines.js"
 
 import { ReactComponent as Twitter } from "../assets/img/twitter.svg"
 import { ReactComponent as Edit } from "../assets/img/edit-2.svg"
-
+import openairequest from "../data/openairequest"
 import axios from "axios"
 
 const dark = window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -56,11 +56,13 @@ const OpenAIHeadline = props => {
 const OpenAI = props => {
 	const [showModal, setShowModal] = useState(false)
 	const [tweet, setTweet] = useState("")
+	const [index, setIndex] = useState(null)
+	const { article, choices, removeFromChoices } = props
 
-	const { article, choices } = props
-
-	const openTweetDetail = choice => {
-		setTweet(choice)
+	const openTweetDetail = index => {
+		const choice = choices.find(c => c.index === index)
+		setTweet(choice.text)
+		setIndex(choice.index)
 		setShowModal(true)
 	}
 
@@ -72,6 +74,7 @@ const OpenAI = props => {
 		alert("You posted to twitter:\n\n" + tweet)
 		setShowModal(false)
 	}
+
 	return (
 		<Fragment>
 			{choices.map((c, i) => (
@@ -90,7 +93,7 @@ const OpenAI = props => {
 							paddingRight: "1em"
 						}}
 						width="24px"
-						onClick={() => openTweetDetail(c.text)}
+						onClick={() => openTweetDetail(c.index)}
 					/>
 					<p style={{ flexGrow: 1 }}>{c.text}</p>
 				</div>
@@ -99,8 +102,10 @@ const OpenAI = props => {
 				isOpen={showModal}
 				toggleModal={setShowModal}
 				tweet={tweet}
+				index={index}
 				setTweet={setTweet}
 				postToTwitter={postToTwitter}
+				removeFromChoices={removeFromChoices}
 			/>
 		</Fragment>
 	)

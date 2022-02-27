@@ -132,3 +132,14 @@ form {
 	align-items: center;
 	margin: 0;
 }
+
+article {
+	padding-top: 1em;
+}
+article > header {
+	border-bottom: none;
+}
+
+svg {
+	opacity: 0.5;
+}
