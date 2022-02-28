@@ -1,11 +1,10 @@
 import { Fragment, useState } from "react"
+import axios from "axios"
+
 import TweetModal from "./TweetModal"
-import { HeadLine, findElapsedTime } from "./News/Headlines.js"
+import { findElapsedTime } from "./News/Headlines.js"
 
 import { ReactComponent as Twitter } from "../assets/img/twitter.svg"
-import { ReactComponent as Edit } from "../assets/img/edit-2.svg"
-import openairequest from "../data/openairequest"
-import axios from "axios"
 
 const dark = window.matchMedia("(prefers-color-scheme: dark)").matches
 
@@ -36,10 +35,26 @@ const fetchOpenAI = seed => {
 		.catch(error => ({ data: null, error }))
 }
 
-const OpenAIHeadline = props => {
-	const { article, sendSeed, newslist } = props
+const EmptyResults = props => {
 	return (
-		<div className="headline" style={{ color: dark ? "#bbc6ce" : "#415462" }}>
+		<div>
+			<p>
+				You have not generated any tweets, yet. When you do, they will appear
+				here.
+			</p>
+		</div>
+	)
+}
+
+const OpenAIHeadline = props => {
+	const { article } = props
+	return (
+		<div
+			className="headline"
+			style={{
+				backgroundColor: dark ? "#11191f" : "#fff"
+			}}
+		>
 			<div className="main">
 				<div>
 					<h6>{article.source.name}</h6>
@@ -66,36 +81,24 @@ const OpenAI = props => {
 		setShowModal(true)
 	}
 
-	const handleUpdate = e => {
-		setTweet(e.target.value)
-	}
-
 	const postToTwitter = tweet => {
 		alert("You posted to twitter:\n\n" + tweet)
 		setShowModal(false)
 	}
 
+	if (choices.length < 1) return <EmptyResults />
+
 	return (
 		<Fragment>
+			<div className="content-header">
+				<OpenAIHeadline article={article} />
+			</div>
 			{choices.map((c, i) => (
-				<div
-					key={i}
-					style={{
-						display: "flex",
-						color: dark ? "#bbc6ce" : "#415462"
-					}}
-				>
-					<Twitter
-						style={{
-							width: "10%",
-							flexShrink: 0,
-							margin: "auto",
-							paddingRight: "1em"
-						}}
-						width="24px"
-						onClick={() => openTweetDetail(c.index)}
-					/>
-					<p style={{ flexGrow: 1 }}>{c.text}</p>
+				<div key={i} className="tweet" onClick={() => openTweetDetail(i)}>
+					<div>
+						<Twitter />
+					</div>
+					{c.text}
 				</div>
 			))}
 			<TweetModal

@@ -13,17 +13,14 @@ nav {
 	flex-shrink: 0;
 }
 
+.content-header {
+	position: sticky;
+	top: 0;
+}
 .content {
 	flex-grow: 1;
 	overflow: auto;
-	color: rgba(0, 0, 0, 0);
-	transition: color 0.3s ease;
-	max-width: 700px;
 	margin: 0 auto;
-}
-
-.content:hover {
-	color: rgba(0, 0, 0, 0.3);
 }
 
 *::-webkit-scrollbar,
@@ -140,6 +137,23 @@ article > header {
 	border-bottom: none;
 }
 
+.tweet {
+	display: flex;
+	align-items: center;
+	padding: 0.75em 0 0.75em;
+}
+
+.tweet > div {
+	text-align: center;
+	width: 10%;
+	flex-shrink: 0;
+}
+
 svg {
 	opacity: 0.5;
+}
+
+.tweet svg {
+	position: relative;
+	z-index: -1;
 }
