@@ -39,18 +39,6 @@ const Error = props => {
 	)
 }
 
-const headerLayout = props => ({
-	openai: <OpenAIHeadline {...props} />
-})
-
-const contentLayout = props => ({
-	home: <Home {...props} />,
-	headlines: <Headlines {...props} />,
-	openai: <OpenAI {...props} />,
-	loading: <Loading {...props} />,
-	error: <Error {...props} />
-})
-
 const Content = props => {
 	const [newslist, setNewslist] = useState([])
 	const [seed, setSeed] = useState("")
@@ -71,7 +59,9 @@ const Content = props => {
 		fetchOpenAI(seed).then(({ data, error }) => {
 			if (error) handleError(error)
 			else {
-				setChoices(data.choices)
+				setChoices(
+					data.choices.map(c => ({ text: c.text.trim(), index: c.index }))
+				)
 				setComponent("openai")
 			}
 		})
