@@ -62,17 +62,35 @@ const downloadAllHeadlines = () =>
 
 writeNewsFileFromDir = () => {
 	const filenames = fs.readdirSync(DATADIR)
-	const articles = filenames.map(filename =>
-		JSON.parse(fs.readFileSync(DATADIR + "/" + filename))
-	)
+	const articles = filenames
+		.map(filename => fs.readFileSync(DATADIR + "/" + filename).toString())
+		.join(",")
 	console.log(
-		"Writing " + articles.length + " articles to " + NEWSFILEPATH + "."
+		"Writing " + filenames.length + " articles to " + NEWSFILEPATH + "."
 	)
 	fs.writeFileSync(NEWSFILEPATH, "[")
-	articles.map(a =>
-		fs.writeFileSync(NEWSFILEPATH, JSON.stringify(a) + ",", { flag: "a" })
-	)
+	fs.writeFileSync(NEWSFILEPATH, articles, { flag: "a" })
 	fs.writeFileSync(NEWSFILEPATH, "]", { flag: "a" })
 }
 
+const fixIds = () => {
+	let iter = 1
+	const filenames = fs.readdirSync(DATADIR)
+	const articles = filenames
+		.map(filename => JSON.parse(fs.readFileSync(DATADIR + "/" + filename)))
+		.map(a => {
+			a.id = iter
+			iter++
+			return JSON.stringify(a)
+		})
+		.join(",")
+
+	console.log(articles)
+	fs.writeFileSync(NEWSFILEPATH, "[")
+	fs.writeFileSync(NEWSFILEPATH, articles, { flag: "a" })
+	fs.writeFileSync(NEWSFILEPATH, "]", { flag: "a" })
+}
+
+//fixIds()
+//writeNewsFileFromDir()
 downloadAllHeadlines().then(() => writeNewsFileFromDir())
