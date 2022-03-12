@@ -1,39 +1,11 @@
 import { Fragment, useState } from "react"
 import axios from "axios"
-
 import TweetModal from "./TweetModal"
-import { findElapsedTime } from "./News/Headlines.js"
+import { findElapsedTime } from "../utils"
 
 import { ReactComponent as Twitter } from "../assets/img/twitter.svg"
 
 const dark = window.matchMedia("(prefers-color-scheme: dark)").matches
-
-const OPENAI_API_PATH =
-	"https://api.openai.com/v1/engines/text-davinci-001/completions"
-
-const data = {
-	max_tokens: 100,
-	temperature: 0.6,
-	n: 10,
-	echo: false
-}
-
-const headers = {
-	"Content-Type": "application/json",
-	Authorization: "Bearer " + process.env.REACT_APP_OPENAPI_KEY
-}
-const config = { headers }
-
-const fetchOpenAI = seed => {
-	const twitterPrompt =
-		'I saw a news headline today that said: "' +
-		seed +
-		'." So I wrote a funny tweet about it that said: '
-	return axios
-		.post(OPENAI_API_PATH, { prompt: twitterPrompt, ...data }, config)
-		.then(res => res)
-		.catch(error => ({ data: null, error }))
-}
 
 const EmptyResults = props => {
 	return (
@@ -115,4 +87,4 @@ const OpenAI = props => {
 }
 
 export default OpenAI
-export { OpenAIHeadline, fetchOpenAI }
+export { OpenAIHeadline }

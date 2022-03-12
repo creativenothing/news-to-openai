@@ -3,34 +3,7 @@ import axios from "axios"
 import Home from "./Home"
 import Headlines, { HeadlineFilter } from "./News/Headlines"
 import OpenAI, { OpenAIHeadline } from "./OpenAI"
-import openairequest from "../data/openairequest"
-
-const fetchNews = () => {
-	return axios
-		.get("/news.json", {
-			headers: {
-				"Content-Type": "application/json"
-			}
-		})
-		.then(res => {
-			console.dir(res.data)
-			return res.data
-		})
-		.catch(e => console.log(e))
-}
-const sortByDate = newslist =>
-	newslist
-		.map(n => {
-			n.date = new Date(n.publishedAt)
-			return n
-		})
-		.sort((a, b) => b.date - a.date)
-const fetchOpenAIDev = () =>
-	new Promise(resolve => resolve({ data: openairequest }))
-const fetchOpenAIProd = require("./OpenAI").fetchOpenAI
-const fetchOpenAI =
-	process.env.NODE_ENV === "production" ? fetchOpenAIProd : fetchOpenAIDev
-
+import { fetchNews, sortByDate, fetchOpenAI } from "../utils"
 const Loading = () => {
 	return (
 		<div className="loading">

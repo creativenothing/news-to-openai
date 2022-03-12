@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 import axios from "axios"
 import Headline from "./Headline"
 import { ReactComponent as Search } from "../../assets/img/search.svg"
-import findElapsedTime from "../../utils/findElapsedTime"
 
 const SearchBar = props => {
 	const { handleChange, handleSubmit, search } = props
@@ -74,4 +73,4 @@ const Headlines = props => {
 
 export default Headlines
 
-export { Headline, HeadlineFilter, findElapsedTime }
+export { Headline, HeadlineFilter }
