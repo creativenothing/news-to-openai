@@ -1,7 +1,7 @@
 import { Fragment, useState, useEffect } from "react"
 import axios from "axios"
 import Home from "./Home"
-import Headlines, { HeadlineFilter } from "./News/Headlines"
+import Headlines, { HeadlineFilter } from "./Headlines"
 import OpenAI, { OpenAIHeadline } from "./OpenAI"
 import { fetchNews, sortByDate, fetchOpenAI } from "../utils"
 const Loading = () => {

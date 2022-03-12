@@ -73,4 +73,4 @@ const Headlines = props => {
 
 export default Headlines
 
-export { Headline, HeadlineFilter }
+export { HeadlineFilter }
