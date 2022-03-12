@@ -1,11 +1,30 @@
 import { Fragment, useState, useEffect } from "react"
+import axios from "axios"
 import Home from "./Home"
-import Headlines from "./News/Headlines"
+import Headlines, { HeadlineFilter } from "./News/Headlines"
 import OpenAI, { OpenAIHeadline } from "./OpenAI"
-
-import { allNews } from "./News/Headlines"
 import openairequest from "../data/openairequest"
 
+const fetchNews = () => {
+	return axios
+		.get("/news.json", {
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+		.then(res => {
+			console.dir(res.data)
+			return res.data
+		})
+		.catch(e => console.log(e))
+}
+const sortByDate = newslist =>
+	newslist
+		.map(n => {
+			n.date = new Date(n.publishedAt)
+			return n
+		})
+		.sort((a, b) => b.date - a.date)
 const fetchOpenAIDev = () =>
 	new Promise(resolve => resolve({ data: openairequest }))
 const fetchOpenAIProd = require("./OpenAI").fetchOpenAI
@@ -43,9 +62,10 @@ const Content = props => {
 	const [newslist, setNewslist] = useState([])
 	const [seed, setSeed] = useState("")
 	const [choices, setChoices] = useState([])
+	const [filters, setFilters] = useState({ keywords: [] })
 
 	useEffect(() => {
-		setNewslist(allNews)
+		fetchNews().then(newslist => setNewslist(sortByDate(newslist)))
 	}, [])
 
 	const handleError = err => {
@@ -67,24 +87,32 @@ const Content = props => {
 		})
 	}
 
-	const filterNews = keywords => {
+	const filterByKeywords = keywords => {
 		const keywordArray = keywords.toLowerCase().replace(",", " ").split(" ")
-		const filteredNews = allNews.filter(
+		const filteredNews = [...newslist].filter(
 			n =>
-				n.description &&
-				keywordArray.some(word => n.description.toLowerCase().includes(word))
+				!n.description ||
+				keywordArray.some(word => !n.description.toLowerCase().includes(word))
 		)
-		setNewslist(filteredNews)
+		const filterIds = filteredNews.map(n => n.id)
+		setFilters({ keywords: filterIds })
 	}
+	const filter = newslist =>
+		[...newslist].filter(n => !filters.keywords.includes(n.id))
 
-	const clearFilter = () => setNewslist(allNews)
+	const clearFilter = () => setFilters({ keywords: [] })
 
 	const removeFromChoices = index => {
 		setChoices(choices.filter(c => c.index !== index))
 	}
 
 	const { component, setComponent } = props
-
+	const headlineFilter = (
+		<HeadlineFilter
+			filterByKeywords={filterByKeywords}
+			clearFilter={clearFilter}
+		/>
+	)
 	const renderSwitch = () => {
 		switch (component) {
 			case "loading":
@@ -96,8 +124,9 @@ const Content = props => {
 			case "headlines":
 				return (
 					<Headlines
+						headlineFilter={headlineFilter}
 						setComponent={setComponent}
-						newslist={newslist}
+						newslist={filter(newslist)}
 						sendSeed={sendSeed}
 					/>
 				)

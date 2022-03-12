@@ -1,29 +1,8 @@
-import React, { useState } from "react"
-
+import React, { useState, useEffect } from "react"
+import axios from "axios"
 import Headline from "./Headline"
 import { ReactComponent as Search } from "../../assets/img/search.svg"
 import findElapsedTime from "../../utils/findElapsedTime"
-
-const news_dir = require.context("../../data/news", false, /\.json$/)
-
-const readNews = r => {
-	let results = []
-	r.keys().forEach(i => {
-		const newResult = r(i)
-		results = results.concat(newResult)
-	})
-	return results
-}
-
-const sortByDate = newslist =>
-	newslist
-		.map(n => {
-			n.date = new Date(n.publishedAt)
-			return n
-		})
-		.sort((a, b) => b.date - a.date)
-
-const allNews = sortByDate(readNews(news_dir))
 
 const SearchBar = props => {
 	const { handleChange, handleSubmit, search } = props
@@ -42,13 +21,13 @@ const SearchBar = props => {
 }
 
 const HeadlineFilter = props => {
-	const { filterNews, clearFilter } = props
+	const { filterByKeywords, clearFilter } = props
 	const [search, setSearch] = useState("")
 
 	const handleChange = e => setSearch(e.target.value)
 	const handleSubmit = e => {
 		e.preventDefault()
-		filterNews(search)
+		filterByKeywords(search)
 		setSearch("")
 	}
 	return (
@@ -66,14 +45,14 @@ const HeadlineFilter = props => {
 			<span
 				role="button"
 				className="secondary outline"
-				onClick={() => filterNews("covid")}
+				onClick={() => filterByKeywords("covid")}
 			>
 				covid
 			</span>
 			<span
 				role="button"
 				className="secondary outline"
-				onClick={() => filterNews("ukraine")}
+				onClick={() => filterByKeywords("ukraine")}
 			>
 				ukraine
 			</span>
@@ -82,12 +61,12 @@ const HeadlineFilter = props => {
 }
 
 const Headlines = props => {
-	const { newslist } = props
-	sortByDate(newslist)
+	const { newslist, headlineFilter } = props
 	return (
 		<React.Fragment>
+			{headlineFilter}
 			{newslist.map(n => (
-				<Headline key={n.publishedAt} article={n} {...props} />
+				<Headline key={n.id} article={n} {...props} />
 			))}
 		</React.Fragment>
 	)
@@ -95,4 +74,4 @@ const Headlines = props => {
 
 export default Headlines
 
-export { allNews, Headline, HeadlineFilter, findElapsedTime }
+export { Headline, HeadlineFilter, findElapsedTime }
