@@ -31,14 +31,19 @@ const DATADIR = path.resolve(__dirname, "../data/news/")
 const NEWSFILEPATH = path.resolve(__dirname, "../public/news.json")
 let id = fs.readdirSync(__dirname + "/../data/news").length + 1
 
-console.log(DATADIR)
-console.log(NEWSFILEPATH)
-console.log(id)
+console.log("data directory: " + DATADIR)
+console.log("newsfile path: " + NEWSFILEPATH)
+console.log("number of existing articles: " + id)
+
 const fetchHeadlines = sentParams => {
 	const params = { ...defaultParams, ...sentParams }
+	console.log("Fetching headlines from " + NEWS_API_PATH)
 	return axios
 		.get(NEWS_API_PATH, { headers, params })
-		.then(({ data }) => data.articles)
+		.then(({ data }) => {
+			console.log("Retrieved " + data.articles.length + " articles. ")
+			return data.articles
+		})
 		.catch(err => console.log(err))
 }
 
@@ -50,7 +55,19 @@ const saveArticle = article => {
 	fs.writeFileSync(filepath, JSON.stringify(article))
 }
 
-const generateNews = articles => {
+const downloadAllHeadlines = () =>
+	fetchHeadlines()
+		.then(articles => articles.forEach(a => saveArticle(a)))
+		.catch(e => console.log(e))
+
+writeNewsFileFromDir = () => {
+	const filenames = fs.readdirSync(DATADIR)
+	const articles = filenames.map(filename =>
+		JSON.parse(fs.readFileSync(DATADIR + "/" + filename))
+	)
+	console.log(
+		"Writing " + articles.length + " articles to " + NEWSFILEPATH + "."
+	)
 	fs.writeFileSync(NEWSFILEPATH, "[")
 	articles.map(a =>
 		fs.writeFileSync(NEWSFILEPATH, JSON.stringify(a) + ",", { flag: "a" })
@@ -58,29 +75,4 @@ const generateNews = articles => {
 	fs.writeFileSync(NEWSFILEPATH, "]", { flag: "a" })
 }
 
-const downloadAllHeadlines = () => {
-	fetchHeadlines()
-		.then(articles => {
-			articles.map(a => saveArticle(a))
-			generateNews(articles)
-		})
-		.catch(e => console.log(e))
-}
-
-writeNewsFileFromDir = () => {
-	let iter = 1
-	const filenames = fs.readdirSync(DATADIR)
-	const articles = filenames.map(filename =>
-		JSON.parse(fs.readFileSync(DATADIR + "/" + filename))
-	)
-	articles.map(a => {
-		a.id = iter
-		iter++
-		console.log(a)
-		return a
-	})
-	generateNews(articles)
-}
-
-writeNewsFileFromDir()
-//downloadAllHeadlines()
+downloadAllHeadlines().then(() => writeNewsFileFromDir())
