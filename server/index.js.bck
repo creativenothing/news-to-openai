@@ -1,0 +1,43 @@
+const express = require("express")
+const morgan = require("morgan")
+const passport = require("passport-twitter")
+const app = express()
+
+app.use(morgan("tiny"))
+passport.use
+const port = 5000
+console.log(process.env)
+const CONSUMER_KEY = process.env.CONSUMER_KEY
+const CONSUMER_SECRET = process.env.CONSUMER_SECRET
+
+console.log(CONSUMER_KEY)
+passport.use(
+	new TwitterStrategy(
+		{
+			consumerKey: CONSUMER_KEY,
+			consumerSecret: CONSUMER_SECRET,
+			callbackURL: "http://127.0.0.1:3000/auth/twitter/callback"
+		},
+		function (token, tokenSecret, profile, cb) {
+			console.log({ twitterId: profile.id })
+		}
+	)
+)
+
+app.get("/test-backend", (req, res) => {
+	res.json({ data: "hello-world", data2: "hello" })
+})
+
+app.get("/auth/twitter", passport.authenticate("twitter"))
+
+app.get(
+	"/auth/twitter/callback",
+	passport.authenticate("twitter", { failureRedirect: "/login" }),
+	function (req, res) {
+		// Successful authentication, redirect home.
+		res.redirect("/")
+	}
+)
+app.listen(port, () => {
+	console.log(`l337 haxing happening on port ${port}`)
+})

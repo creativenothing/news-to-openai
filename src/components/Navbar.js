@@ -1,5 +1,5 @@
+import { Link } from "react-router-dom"
 const Navbar = props => {
-	const { setComponent } = props
 	return (
 		<nav>
 			<ul>
@@ -9,19 +9,16 @@ const Navbar = props => {
 			</ul>
 			<ul>
 				<li>
-					<a href="#" onClick={() => setComponent("home")}>
-						home
-					</a>
+					<Link to="/">home</Link>
 				</li>
 				<li>
-					<a href="#" onClick={() => setComponent("headlines")}>
-						headlines
-					</a>
+					<Link to="/headlines">headlines</Link>
 				</li>
 				<li>
-					<a href="#" onClick={() => setComponent("openai")}>
-						results
-					</a>
+					<Link to="/results">results</Link>
+				</li>
+				<li>
+					<Link to="/auth/twitter">auth</Link>
 				</li>
 			</ul>
 		</nav>

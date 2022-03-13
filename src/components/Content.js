@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react"
-
+import axios from "axios"
+import { Route, Routes, Navigate } from "react-router-dom"
 import Home from "./Home"
 import Headlines, { HeadlineFilter } from "./Headlines"
 import OpenAI from "./OpenAI"
-
 import { fetchNews, sortByDate, fetchOpenAI } from "../utils"
 
 const Loading = () => {
@@ -39,6 +39,9 @@ const Content = props => {
 	const [choices, setChoices] = useState([])
 	const [filters, setFilters] = useState({ keywords: [] })
 
+	const testBackend = () => {
+		axios.get("/test-backend").then(res => console.log(res))
+	}
 	useEffect(() => {
 		fetchNews().then(newslist => setNewslist(sortByDate(newslist)))
 	}, [])
@@ -61,7 +64,6 @@ const Content = props => {
 			}
 		})
 	}
-
 	const filterByKeywords = keywords => {
 		const keywordArray = keywords.toLowerCase().replace(",", " ").split(" ")
 		const filteredNews = [...newslist].filter(
@@ -95,7 +97,11 @@ const Content = props => {
 			case "error":
 				return <Error setComponent={setComponent} />
 			case "home":
-				return <Home setComponent={setComponent} />
+				return (
+					<div>
+						<Home setComponent={setComponent} />
+					</div>
+				)
 			case "headlines":
 				return (
 					<Headlines
@@ -118,7 +124,47 @@ const Content = props => {
 				return <div>something is problematic...</div>
 		}
 	}
-
-	return <div className="content">{renderSwitch(component)}</div>
+	const auth = () =>
+		axios
+			.get("/auth/twitter")
+			.then(res => console.log(res))
+			.catch(e => console.log(e))
+	return (
+		<div className="content">
+			<span role="button" onClick={testBackend}>
+				Test Backend
+			</span>
+			<span role="button" onClick={auth}>
+				Test auth
+			</span>
+			<Routes>
+				<Route exact path="/" element={<Home />} />
+				<Route
+					exact
+					path="/headlines"
+					element={
+						<Headlines
+							headlineFilter={headlineFilter}
+							setComponent={setComponent}
+							newslist={filter(newslist)}
+							sendSeed={sendSeed}
+						/>
+					}
+				/>
+				<Route
+					exact
+					path="/results"
+					element={
+						<OpenAI
+							article={newslist.find(n => n.title === seed)}
+							seed={seed}
+							choices={choices}
+							removeFromChoices={removeFromChoices}
+						/>
+					}
+				/>
+			</Routes>
+		</div>
+	)
 }
 export default Content

@@ -23,5 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 .old
 .env
+.setenv
 data/
 news.json
