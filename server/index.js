@@ -2,11 +2,13 @@ var express = require("express")
 var passport = require("passport")
 var path = require("path")
 var cookieParser = require("cookie-parser")
+const cors = require("cors")
 var logger = require("morgan")
 
 var authRouter = require("./routes/auth")
 var port = 5000
 var app = express()
+app.use(cors())
 
 app.use(logger("dev"))
 app.use(express.json())
@@ -14,6 +16,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, "public")))
 // session setup
+//
 //
 // This sequence of middleware is necessary for login sessions.  The first
 // middleware loads session data and makes it available at `req.session`.  The

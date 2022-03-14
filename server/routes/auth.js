@@ -1,15 +1,38 @@
 var express = require("express")
 var passport = require("passport")
+const clientID = process.env.CLIENT_ID
+const clientSecret = process.env.CLIENT_SECRET
 const consumerKey = process.env.CONSUMER_KEY
 const consumerSecret = process.env.CONSUMER_SECRET
-const callbackURL = "http://localhost:5000/auth/twitter/callback"
-
-const TwitterStrategy = require("passport-twitter").Strategy
+const TwitterStrategy = require("@superfaceai/passport-twitter-oauth2").Strategy
+const callbackURL = "http://127.0.0.1:3000/auth/twitter/callback"
+//const OAuth2Strategy = require("passport-oauth2").Strategy
+//passport.use(
+//	new OAuth2Strategy(
+//		{
+//			authorizationURL: "https://twitter.com/i/oauth2/authorize",
+//			tokenURL: "https://api.twitter.com/oauth2/token",
+//			clientID: process.env.CLIENT_ID,
+//			clientSecret: process.env.CLIENT_SECRET,
+//			callbackURL: "http://localhost:3000/auth/twitter/callback",
+//			scope: "tweet.write",
+//			state: "state",
+//			code_challenge: "challenge",
+//			code_challenge_method: "plain"
+//		},
+//		function (accessToken, refreshToken, profile, cb) {
+//			console.log(accessToken, refreshToken, profile, done)
+//			return done(null, profile, { tokens: { accessToken, refreshToken } })
+//		}
+//	)
+//)
+//const TwitterStrategy = require("passport-twitter").Strategy
 passport.use(
 	new TwitterStrategy(
-		{ consumerKey, consumerSecret, callbackURL },
+		{ clientID, clientSecret, consumerKey, consumerSecret, callbackURL },
 		(accessToken, refreshToken, profile, done) => {
-			return done(null, profile)
+			console.log(accessToken, refreshToken, profile, done)
+			return done(null, profile, { tokens: { accessToken, refreshToken } })
 		}
 	)
 )
@@ -24,19 +47,15 @@ router.get("/auth/twitter", passport.authenticate("twitter"))
 router.get(
 	"/auth/twitter/callback",
 	passport.authenticate("twitter", {
-		failureRedirect: "/login"
+		failureRedirect: "/",
+		scope: ["tweet.read", "tweet.write", "users.read"]
 	}),
-	function (req, res, next) {
+	function (req, res) {
 		console.log(req, res)
-		req.login({ user: "me" }, function (err) {
-			if (err) {
-				return next(err)
-			}
-			res.redirect("/")
-		})
+		// Successful authentication, redirect home.
+		res.redirect("/")
 	}
 )
-
 router.get("/logout", function (req, res, next) {
 	req.logout()
 	res.redirect("/")
