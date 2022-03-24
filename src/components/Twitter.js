@@ -1,4 +1,4 @@
-import { TwitterApi } from "twitter-api-v2"
+import { TwitterApi } from 'twitter-api-v2'
 
 const appKey = process.env.REACT_APP_TWITTER_APPKEY
 const appSecret = process.env.REACT_APP_TWITTER_APPSECRET
