@@ -1,42 +1,40 @@
-var express = require("express")
-var passport = require("passport")
-var path = require("path")
-var cookieParser = require("cookie-parser")
-const cors = require("cors")
-var logger = require("morgan")
+const express = require('express')
+const passport = require('passport')
+const path = require('path')
+const cors = require('cors')
+const logger = require('morgan')
 
-var authRouter = require("./routes/auth")
-var port = 5000
-var app = express()
-app.use(cors())
+const authRouter = require('./routes/auth')
+const port = 5000
+const app = express()
 
-app.use(logger("dev"))
+app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(cookieParser())
-app.use(express.static(path.join(__dirname, "public")))
-// session setup
-//
-//
-// This sequence of middleware is necessary for login sessions.  The first
-// middleware loads session data and makes it available at `req.session`.  The
-// next lines initialize Passport and authenticate the request based on session
-// data.  If session data contains a logged in user, the user is set at
-// `req.user`.
+app.use(express.static(path.join(__dirname, 'public')))
+
 app.use(
-	require("express-session")({
-		secret: "keyboard cat",
-		resave: false,
-		saveUninitialized: false,
-		cookie: { secure: false }
-	})
+  require('express-session')({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false },
+  })
 )
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use("/", authRouter)
-app.get("/test-backend", (req, res) => res.json({ data: "hello, world" }))
+app.use(
+  cors({
+    origin: 'http://127.0.0.1:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  })
+)
+app.use('/', authRouter)
+
 app.listen(port, () => {
-	console.log(`l337 haxing happening on port ${port}`)
+  console.log(`l337 haxing happening on port ${port}`)
 })
+
 module.exports = app

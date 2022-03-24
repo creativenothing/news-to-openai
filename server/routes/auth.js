@@ -1,64 +1,53 @@
-var express = require("express")
-var passport = require("passport")
+const express = require('express')
+const passport = require('passport')
 const clientID = process.env.CLIENT_ID
+const router = express.Router()
 const clientSecret = process.env.CLIENT_SECRET
 const consumerKey = process.env.CONSUMER_KEY
 const consumerSecret = process.env.CONSUMER_SECRET
-const TwitterStrategy = require("@superfaceai/passport-twitter-oauth2").Strategy
-const callbackURL = "http://127.0.0.1:3000/auth/twitter/callback"
-//const OAuth2Strategy = require("passport-oauth2").Strategy
-//passport.use(
-//	new OAuth2Strategy(
-//		{
-//			authorizationURL: "https://twitter.com/i/oauth2/authorize",
-//			tokenURL: "https://api.twitter.com/oauth2/token",
-//			clientID: process.env.CLIENT_ID,
-//			clientSecret: process.env.CLIENT_SECRET,
-//			callbackURL: "http://localhost:3000/auth/twitter/callback",
-//			scope: "tweet.write",
-//			state: "state",
-//			code_challenge: "challenge",
-//			code_challenge_method: "plain"
-//		},
-//		function (accessToken, refreshToken, profile, cb) {
-//			console.log(accessToken, refreshToken, profile, done)
-//			return done(null, profile, { tokens: { accessToken, refreshToken } })
-//		}
-//	)
-//)
-//const TwitterStrategy = require("passport-twitter").Strategy
+const TwitterStrategy = require('@superfaceai/passport-twitter-oauth2')
+const callbackURL = 'http://localhost:3000/auth/twitter/callback'
+
 passport.use(
-	new TwitterStrategy(
-		{ clientID, clientSecret, consumerKey, consumerSecret, callbackURL },
-		(accessToken, refreshToken, profile, done) => {
-			console.log(accessToken, refreshToken, profile, done)
-			return done(null, profile, { tokens: { accessToken, refreshToken } })
-		}
-	)
+  new TwitterStrategy(
+    { clientID, clientSecret, consumerKey, consumerSecret, callbackURL },
+    (accessToken, refreshToken, profile, done) => {
+      return done(null, profile, { tokens: { accessToken, refreshToken } })
+    }
+  )
 )
-var router = express.Router()
+passport.serializeUser((user, done) => done(null, user))
+passport.deserializeUser((user, done) => done(null, user))
 
-router.get("/login", function (req, res, next) {
-	res.json({ login: "yes" })
+router.get('/login', (req, res, next) => res.json({ login: 'yes' }))
+
+router.get('/logout', (req, res, next) => {
+  req.logout()
+  res.redirect('/')
 })
-
-router.get("/auth/twitter", passport.authenticate("twitter"))
 
 router.get(
-	"/auth/twitter/callback",
-	passport.authenticate("twitter", {
-		failureRedirect: "/",
-		scope: ["tweet.read", "tweet.write", "users.read"]
-	}),
-	function (req, res) {
-		console.log(req, res)
-		// Successful authentication, redirect home.
-		res.redirect("/")
-	}
+  '/auth/twitter',
+  passport.authenticate('twitter', {
+    scope: ['tweet.read', 'tweet.write', 'users.read'],
+  })
 )
-router.get("/logout", function (req, res, next) {
-	req.logout()
-	res.redirect("/")
+
+router.get('/auth/me', (req, res) => {
+  res.json(req.session)
 })
 
+router.get(
+  '/auth/twitter/callback',
+  passport.authenticate('twitter', {
+    failureRedirect: '/',
+  }),
+  (req, res) => {
+    const user = req.user
+    req.login(user, err => {
+      if (err) return next(err)
+    })
+    res.redirect('/')
+  }
+)
 module.exports = router
