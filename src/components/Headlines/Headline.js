@@ -8,8 +8,7 @@ const Headline = props => {
     <div
       className="headline"
       key={article.publishedAt}
-      style={{ color: dark ? '#bbc6ce' : '#415462' }}
-    >
+      style={{ color: dark ? '#bbc6ce' : '#415462' }}>
       <div className="main">
         <div>
           <span>

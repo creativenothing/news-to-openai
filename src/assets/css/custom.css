@@ -94,14 +94,6 @@ span[role='button'] {
   width: 70px;
 }
 
-.modal-footer {
-  display: flex;
-  justify-content: space-around;
-  flex-direction: flex-end;
-  align-items: center;
-  margin-top: 2em;
-}
-
 .info span {
   padding: 0.1em 0.2em 0.1em 0.2em;
 }
@@ -150,10 +142,79 @@ article > header {
 }
 
 svg {
-  opacity: 0.5;
+  color: var(--color);
 }
 
 .tweet svg {
   position: relative;
   z-index: -1;
+}
+
+.avatar img {
+  aspect-ratio: 1/1;
+  padding: 0.5rem;
+  border-radius: 100%;
+  max-width: 50px;
+}
+
+.twitter-modal {
+  overflow: hidden;
+}
+
+.twitter-modal .buttons {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: flex-end;
+  align-items: center;
+}
+
+.twitter-modal .close {
+  float: right;
+  align-self: start;
+}
+.twitter-modal .tweet,
+.twitter-modal .link {
+  font-size: 1.25rem;
+}
+
+.twitter-modal a {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.twitter-modal a:focus {
+  background-color: transparent;
+}
+
+.twitter-card {
+}
+
+.twitter-card {
+  border: 1px solid var(--color);
+  border-radius: 5%;
+  overflow: hidden;
+  padding-bottom: 1rem;
+}
+
+.twitter-card .text {
+  padding: 0.5rem;
+}
+.title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: var(--color);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }

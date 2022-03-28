@@ -25,8 +25,7 @@ const OpenAIHeadline = props => {
       className="headline"
       style={{
         backgroundColor: dark ? '#11191f' : '#fff'
-      }}
-    >
+      }}>
       <div className="main">
         <div>
           <h6>{article.source.name}</h6>
@@ -44,18 +43,31 @@ const OpenAI = props => {
   const [showModal, setShowModal] = useState(false)
   const [tweet, setTweet] = useState('')
   const [index, setIndex] = useState(null)
+  const [metadata, setMetadata] = useState({})
+
   const { article, choices, removeFromChoices } = props
+
+  const fetchMetadata = url =>
+    axios.post('/twitter/meta', { url }).then(({ data }) => data)
 
   const openTweetDetail = index => {
     const choice = choices.find(c => c.index === index)
     setTweet(choice.text)
     setIndex(choice.index)
-    setShowModal(true)
+    fetchMetadata(article.url).then(res => {
+      setMetadata(res)
+      setShowModal(true)
+    })
   }
 
   const postToTwitter = tweet => {
-    alert('You posted to twitter:\n\n' + tweet)
-    setShowModal(false)
+    axios
+      .post('/twitter', { tweet })
+      .then(({ data }) => {
+        setShowModal(false)
+        alert('You posted to twitter:\n\n' + data.text)
+      })
+      .catch(err => console.log(err))
   }
 
   if (choices.length < 1) return <EmptyResults />
@@ -79,6 +91,8 @@ const OpenAI = props => {
         tweet={tweet}
         index={index}
         setTweet={setTweet}
+        article={article}
+        metadata={metadata}
         postToTwitter={postToTwitter}
         removeFromChoices={removeFromChoices}
       />

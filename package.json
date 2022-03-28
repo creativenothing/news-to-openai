@@ -8,6 +8,7 @@
 		"@testing-library/react": "^12.1.2",
 		"@testing-library/user-event": "^13.5.0",
 		"axios": "^0.26.0",
+		"cheerio": "^1.0.0-rc.10",
 		"concurrently": "^7.0.0",
 		"cookie-parser": "^1.4.6",
 		"cors": "^2.8.5",
@@ -26,6 +27,7 @@
 		"react-scripts": "5.0.0",
 		"react-slugify": "^2.1.0",
 		"request-promise-native": "^1.0.9",
+		"twitter-api-v2": "^1.11.2",
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {

@@ -4,8 +4,10 @@ const path = require('path')
 const cors = require('cors')
 const logger = require('morgan')
 
-const authRouter = require('./routes/auth')
-const port = 5000
+const twitter = require('./routes/twitter')
+
+const port = process.env.PORT
+
 const app = express()
 
 app.use(logger('dev'))
@@ -18,20 +20,15 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false },
+    cookie: { secure: false }
   })
 )
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use(
-  cors({
-    origin: 'http://127.0.0.1:3000',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-  })
-)
-app.use('/', authRouter)
+app.use(cors())
+
+app.use('/twitter', twitter)
 
 app.listen(port, () => {
   console.log(`l337 haxing happening on port ${port}`)

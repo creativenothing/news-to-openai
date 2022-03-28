@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
+
 const Navbar = props => {
+  const { auth } = props
   return (
     <nav>
       <ul>
@@ -16,9 +18,6 @@ const Navbar = props => {
         </li>
         <li>
           <Link to="/results">results</Link>
-        </li>
-        <li>
-          <Link to="/auth/twitter">auth</Link>
         </li>
       </ul>
     </nav>

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import Modal from './Modal'
 import ModalFooter from './ModalFooter'
 
@@ -15,23 +15,22 @@ const TweetModal = props => {
     setTweet,
     isOpen,
     toggleModal,
-    postToTwitter
+    postToTwitter,
+    article,
+    metadata
   } = props
 
   const [edit, setEdit] = useState(false)
 
-  const taRef = useRef(null)
-
   const handleChange = e => setTweet(e.target.value)
-
   const handleSubmit = () => {
-    postToTwitter(tweet)
+    const tweetAndUrl = `${tweet}\n\n${article.url}`
+    postToTwitter(tweetAndUrl)
     setEdit(false)
     toggleModal(false)
   }
   const handleEdit = () => {
     setEdit(true)
-    taRef.current.focus()
   }
 
   const handleClose = () => {
@@ -46,34 +45,43 @@ const TweetModal = props => {
 
   return (
     <Modal isOpen={isOpen} toggleModal={toggleModal}>
-      <div>
-        <X
-          width={20}
-          style={{
-            display: 'block',
-            marginLeft: 'auto',
-            marginBottom: '1em'
-          }}
-          onClick={handleClose}
-        />
+      <div className="twitter-modal">
+        <header>
+          <X className="close" width={20} onClick={handleClose} />
+        </header>
+        {edit ? (
+          <textarea
+            rows={5}
+            maxLength={280}
+            value={tweet}
+            onChange={handleChange}
+          />
+        ) : (
+          <p className="tweet">{tweet}</p>
+        )}
+        <a
+          className="link"
+          href={article.url}
+          target="_blank"
+          rel="noopener noreferrer">
+          {article.url}
+        </a>
+        <div className="twitter-card">
+          <img src={article.urlToImage} alt="" />
+          <div className="text">
+            <small>{article.source.name}</small>
+            <div className="title">{metadata.title}</div>
+            <p className="description">{metadata.description}</p>
+          </div>
+        </div>
+        <ModalFooter>
+          <div className="buttons">
+            <Twitter onClick={handleSubmit} />
+            <Edit onClick={handleEdit} />
+            <Trash onClick={handleRemove} />
+          </div>
+        </ModalFooter>
       </div>
-      {edit ? (
-        <textarea
-          ref={taRef}
-          rows={5}
-          maxLength={280}
-          value={tweet}
-          onChange={handleChange}
-        />
-      ) : (
-        <p ref={taRef}>{tweet}</p>
-      )}
-      <ModalFooter>
-        <p>Post to Twitter?</p>
-        <Twitter onClick={handleSubmit} />
-        <Edit onClick={handleEdit} />
-        <Trash onClick={handleRemove} />
-      </ModalFooter>
     </Modal>
   )
 }

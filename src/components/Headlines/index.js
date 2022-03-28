@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import Headline from './Headline'
-import { ReactComponent as Search } from '../../assets/img/search.svg'
 
 const SearchBar = props => {
   const { handleChange, handleSubmit, search } = props
 
   return (
     <form onSubmit={handleSubmit}>
-      <Search />
       <input
+        type="search"
         name="search"
         value={search}
         onChange={handleChange}
@@ -34,8 +33,7 @@ const HeadlineFilter = props => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center'
-      }}
-    >
+      }}>
       <SearchBar handleChange={handleChange} handleSubmit={handleSubmit} />
       <span role="button" className="secondary outline" onClick={clearFilter}>
         all
@@ -43,15 +41,13 @@ const HeadlineFilter = props => {
       <span
         role="button"
         className="secondary outline"
-        onClick={() => filterByKeywords('covid')}
-      >
+        onClick={() => filterByKeywords('covid')}>
         covid
       </span>
       <span
         role="button"
         className="secondary outline"
-        onClick={() => filterByKeywords('ukraine')}
-      >
+        onClick={() => filterByKeywords('ukraine')}>
         ukraine
       </span>
     </div>
