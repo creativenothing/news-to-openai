@@ -3,18 +3,8 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import Home from './Home'
 import Headlines, { HeadlineFilter } from './Headlines'
 import OpenAI from './OpenAI'
+import Loading from './Loading'
 import { fetchNews, sortByDate, fetchOpenAI } from '../utils'
-
-const Loading = () => {
-  return (
-    <div className="loading">
-      <div className="sk-bounce sk-center">
-        <div className="sk-bounce-dot"></div>
-        <div className="sk-bounce-dot"></div>
-      </div>
-    </div>
-  )
-}
 
 const Error = props => {
   const { setComponent } = props
@@ -83,7 +73,7 @@ const Content = props => {
     />
   )
   return (
-    <div className="content">
+    <main>
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route
@@ -110,7 +100,7 @@ const Content = props => {
         <Route path="/error" element={<Error />} />
         <Route path="/loading" element={<Loading />} />
       </Routes>
-    </div>
+    </main>
   )
 }
 export default Content
