@@ -56,7 +56,7 @@ const OpenAI = props => {
         sourceName={article.source.name}
       />
       {choices.map((c, i) => (
-        <div className="choice" key={i} onClick={() => openTweetDetail(i)}>
+        <div className="result" key={i} onClick={() => openTweetDetail(i)}>
           {c.text}
         </div>
       ))}
