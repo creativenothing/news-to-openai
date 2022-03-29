@@ -5,8 +5,6 @@ import { findElapsedTime } from '../utils'
 
 import { ReactComponent as Twitter } from '../assets/img/twitter.svg'
 
-const dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-
 const EmptyResults = props => {
   return (
     <div>
@@ -21,11 +19,7 @@ const EmptyResults = props => {
 const OpenAIHeadline = props => {
   const { article } = props
   return (
-    <div
-      className="headline"
-      style={{
-        backgroundColor: dark ? '#11191f' : '#fff'
-      }}>
+    <div className="headline">
       <div className="main">
         <div>
           <h6>{article.source.name}</h6>
