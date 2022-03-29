@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const Navbar = props => {
   return (
@@ -10,13 +10,13 @@ const Navbar = props => {
       </ul>
       <ul>
         <li>
-          <Link to="/">home</Link>
+          <NavLink to="/">home</NavLink>
         </li>
         <li>
-          <Link to="/headlines">headlines</Link>
+          <NavLink to="/headlines">headlines</NavLink>
         </li>
         <li>
-          <Link to="/results">results</Link>
+          <NavLink to="/results">results</NavLink>
         </li>
       </ul>
     </nav>

@@ -18,9 +18,34 @@ nav {
   position: sticky;
   top: 0;
   padding: 0 1rem;
-  background-color: var(--background-color);
+  --background-color: var(--background-color);
+}
+nav a {
+  --color: var(--color);
+  border-radius: 0;
+  padding-bottom: 0.5rem;
 }
 
+nav li {
+}
+nav a:active,
+a:hover,
+a:focus {
+  --color: var(--color);
+}
+
+nav a:active,
+a:focus {
+  --background-color: var(--background-color);
+}
+
+nav a:hover {
+  --background-color: var(--muted-border-color);
+}
+
+nav a.active {
+  border-bottom: 2px solid;
+}
 main {
   flex-grow: 1;
   overflow: auto;
@@ -45,8 +70,9 @@ footer {
 
 #home,
 #headlines,
-#results {
-  padding: 0 1rem;
+#results,
+#empty-results {
+  padding: 0.5rem 1rem;
 }
 
 #home img {
@@ -119,10 +145,17 @@ svg {
   display: flex;
   justify-content: space-between;
 }
-.choice {
+
+.result {
   padding: 1.5rem 0.5rem;
-  border-bottom: 1px solid var(--color);
+  border-bottom: 1px solid var(--muted-color);
 }
+
+.headline:active,
+.headline:hover {
+  background-color: var(--muted-border-color);
+}
+
 .twitter-modal {
   overflow: hidden;
 }
@@ -154,7 +187,7 @@ svg {
 }
 
 .twitter-card {
-  border: 1px solid var(--color);
+  border: 1px solid var(--muted-color);
   border-radius: 5%;
   overflow: hidden;
   margin-bottom: 1rem;
