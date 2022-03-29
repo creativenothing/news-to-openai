@@ -1,35 +1,18 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
-import TweetModal from './TweetModal'
-import { findElapsedTime } from '../utils'
 
-import { ReactComponent as Twitter } from '../assets/img/twitter.svg'
+import TweetModal from './TweetModal'
+import TwitterCard from './TwitterCard'
 
 const EmptyResults = props => {
   return (
-    <div>
+    <section id="empty-results">
       <p>
-        You have not generated any tweets, yet. When you do, they will appear
-        here.
+        You have not generated any tweets yet. View{' '}
+        <a href="/headlines">headlines</a> to generate a list of potential
+        tweets, and then they will appear here.
       </p>
-    </div>
-  )
-}
-
-const OpenAIHeadline = props => {
-  const { article } = props
-  return (
-    <div className="headline">
-      <div className="main">
-        <div>
-          <h6>{article.source.name}</h6>
-          <p>{article.title}</p>
-        </div>
-      </div>
-      <div className="info">
-        <small>{findElapsedTime(article.publishedAt)}</small>
-      </div>
-    </div>
+    </section>
   )
 }
 
@@ -38,8 +21,9 @@ const OpenAI = props => {
   const [tweet, setTweet] = useState('')
   const [index, setIndex] = useState(null)
   const [metadata, setMetadata] = useState({})
-
   const { article, choices, removeFromChoices } = props
+
+  if (choices.length < 1) return <EmptyResults />
 
   const fetchMetadata = url =>
     axios.post('/twitter/meta', { url }).then(({ data }) => data)
@@ -63,19 +47,16 @@ const OpenAI = props => {
       })
       .catch(err => console.log(err))
   }
-
-  if (choices.length < 1) return <EmptyResults />
-
   return (
-    <Fragment>
-      <div className="content-header">
-        <OpenAIHeadline article={article} />
-      </div>
+    <section id="results">
+      <TwitterCard
+        title={article.title}
+        description={article.content}
+        urlToImage={article.urlToImage}
+        sourceName={article.source.name}
+      />
       {choices.map((c, i) => (
-        <div key={i} className="tweet" onClick={() => openTweetDetail(i)}>
-          <div>
-            <Twitter />
-          </div>
+        <div className="choice" key={i} onClick={() => openTweetDetail(i)}>
           {c.text}
         </div>
       ))}
@@ -90,9 +71,8 @@ const OpenAI = props => {
         postToTwitter={postToTwitter}
         removeFromChoices={removeFromChoices}
       />
-    </Fragment>
+    </section>
   )
 }
 
 export default OpenAI
-export { OpenAIHeadline }

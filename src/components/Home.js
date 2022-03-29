@@ -1,17 +1,28 @@
-import { Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import * as hero from '../assets/img/hero'
 import quotes from '../data/quotes.json'
 
-const images = Object.keys(hero)
-const selectedImage = hero[images[Math.floor(Math.random() * quotes.length)]]
+const quote = quotes[Math.floor(Math.random() * quotes.length)]
 
+const Figure = props => {
+  const images = Object.keys(hero)
+  const selectedImage = hero[images[Math.floor(Math.random() * quotes.length)]]
+  return (
+    <div id="figure" className="row">
+      <div className="col-xs-12 col-sm-3">
+        <img src={selectedImage} />
+      </div>
+      <div className="col-xs-12 col-sm-9">
+        <em>{quote}</em>
+      </div>
+    </div>
+  )
+}
 const Home = props => {
-  const quote = quotes[Math.floor(Math.random() * quotes.length)]
   const navigate = useNavigate()
   return (
-    <Fragment>
+    <section id="home">
       <h4>Instructions</h4>
       <p>
         I am a bot that reads current news headlines and generates pithy tweets
@@ -19,7 +30,7 @@ const Home = props => {
       </p>
       <p>
         View{' '}
-        <a href="#" onClick={() => navigate('/results')}>
+        <a href="#" onClick={() => navigate('/headlines')}>
           headlines
         </a>{' '}
         to generate a selection of tweets from a current news headline.
@@ -27,11 +38,8 @@ const Home = props => {
       <p>
         Follow me on twitter: <a href="">@inhabit_ai</a>
       </p>
-      <hr />
-      <blockquote>
-        <em>{quote}</em>
-      </blockquote>
-    </Fragment>
+      <Figure />
+    </section>
   )
 }
 

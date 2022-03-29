@@ -73,34 +73,32 @@ const Content = props => {
     />
   )
   return (
-    <main>
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route
-          path="/headlines"
-          element={
-            <Headlines
-              headlineFilter={headlineFilter}
-              newslist={filter(newslist)}
-              sendSeed={sendSeed}
-            />
-          }
-        />
-        <Route
-          path="/results"
-          element={
-            <OpenAI
-              article={newslist.find(n => n.title === seed)}
-              seed={seed}
-              choices={choices}
-              removeFromChoices={removeFromChoices}
-            />
-          }
-        />
-        <Route path="/error" element={<Error />} />
-        <Route path="/loading" element={<Loading />} />
-      </Routes>
-    </main>
+    <Routes>
+      <Route exact path="/" element={<Home />} />
+      <Route
+        path="/headlines"
+        element={
+          <Headlines
+            headlineFilter={headlineFilter}
+            newslist={filter(newslist)}
+            sendSeed={sendSeed}
+          />
+        }
+      />
+      <Route
+        path="/results"
+        element={
+          <OpenAI
+            article={newslist.find(n => n.title === seed)}
+            seed={seed}
+            choices={choices}
+            removeFromChoices={removeFromChoices}
+          />
+        }
+      />
+      <Route path="/error" element={<Error />} />
+      <Route path="/loading" element={<Loading />} />
+    </Routes>
   )
 }
 export default Content

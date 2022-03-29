@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Headline from './Headline'
 import { ReactComponent as X } from '../../assets/img/x.svg'
+
 const SearchBar = props => {
   const { handleChange, handleSubmit, search } = props
 
@@ -18,7 +19,7 @@ const SearchBar = props => {
 }
 
 const HeadlineFilter = props => {
-  const { filterByKeywords, clearFilter } = props
+  const { filterByKeywords } = props
   const [keywords, setKeywords] = useState([])
   const [search, setSearch] = useState('')
 
@@ -48,9 +49,13 @@ const HeadlineFilter = props => {
         handleSubmit={handleSubmit}
       />
       {keywords.map(k => (
-        <span role="button" className="secondary outline" key={k}>
+        <span
+          role="button"
+          className="secondary outline"
+          key={k}
+          onClick={() => removeKeyword(k)}>
           {k}
-          <X onClick={() => removeKeyword(k)} />
+          <X />
         </span>
       ))}
     </div>
@@ -61,10 +66,12 @@ const Headlines = props => {
   const { newslist, headlineFilter } = props
   return (
     <React.Fragment>
-      {headlineFilter}
-      {newslist.map(n => (
-        <Headline key={n.id} article={n} {...props} />
-      ))}
+      <div id="headlines">
+        {headlineFilter}
+        {newslist.map(n => (
+          <Headline key={n.id} article={n} {...props} />
+        ))}
+      </div>
     </React.Fragment>
   )
 }

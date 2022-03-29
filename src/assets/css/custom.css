@@ -1,5 +1,8 @@
-main {
-  max-width: 700px;
+body {
+  border: 0;
+}
+
+#root {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -7,17 +10,30 @@ main {
   right: 0;
   display: flex;
   flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.content {
+nav {
+  position: sticky;
+  top: 0;
+  padding: 0 1rem;
+  background-color: var(--background-color);
+}
+
+main {
   flex-grow: 1;
   overflow: auto;
-  margin: 0 auto;
+}
+
+footer {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  text-align: right;
 }
 
 *::-webkit-scrollbar,
 *::-webkit-scrollbar-thumb {
-  /*width: 26px;*/ /* hide scrollbar; need the width but leaving for reference*/
   border-radius: 13px;
   background-clip: padding-box;
   border: 10px solid transparent;
@@ -27,61 +43,39 @@ main {
   box-shadow: inset 0 0 0 10px;
 }
 
-.headline {
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5em;
-  flex-grow: 1;
-  margin: 0;
-  padding-top: 0.75em;
-  padding-bottom: 1em;
-  border-bottom: 1px solid;
+#home,
+#headlines,
+#results {
+  padding: 0 1rem;
 }
 
-.headline .main {
-  display: flex;
-  column-gap: 1em;
+#home img {
+  aspect-ratio: 4/3;
+  width: 100%;
+  object-fit: cover;
 }
 
-.headline h6 {
-  margin-bottom: 1rem;
+#home #figure {
+  max-width: 600px;
+  margin: 6rem auto 0;
+  padding: 1rem 0;
+  border-top: 1px solid var(--muted-border-color);
+  border-bottom: 1px solid var(--muted-border-color);
+  align-items: center;
+  justify-content: center;
+  row-gap: 1rem;
 }
-
-.headline p {
-  margin-bottom: 0;
-}
-
-.headline .info {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-footer {
-  margin-left: auto;
-  padding: 0.25em;
-}
-
-.info {
-  display: flex;
-  justify-content: space-around;
-}
-
 input,
 select,
 textarea {
   border: none;
-  background-color: transparent;
+  backround-color: transparent;
   resize: none;
   outline: none;
   box-shadow: none;
 }
 
 span[role='button'] {
-  padding: 0.1em 0.2em;
-}
-
-.info span {
   padding: 0.1em 0.2em;
 }
 
@@ -92,6 +86,7 @@ span[role='button'] {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 input:not([type='checkbox']):not([type='radio']),
 select,
 textarea {
@@ -113,34 +108,21 @@ article {
   padding-top: 1em;
 }
 
-.tweet {
-  display: flex;
-  align-items: center;
-  padding: 0.75em 0 0.75em;
-}
-
-.tweet > div {
-  text-align: center;
-  width: 10%;
-  flex-shrink: 0;
-}
-
 svg {
   color: var(--color);
 }
 
-.tweet svg {
-  position: relative;
-  z-index: -1;
+.headline {
+  padding: 1rem;
 }
-
-.avatar img {
-  aspect-ratio: 1/1;
-  padding: 0.5rem;
-  border-radius: 100%;
-  max-width: 50px;
+.headline .info {
+  display: flex;
+  justify-content: space-between;
 }
-
+.choice {
+  padding: 1.5rem 0.5rem;
+  border-bottom: 1px solid var(--color);
+}
 .twitter-modal {
   overflow: hidden;
 }
@@ -172,13 +154,10 @@ svg {
 }
 
 .twitter-card {
-}
-
-.twitter-card {
   border: 1px solid var(--color);
   border-radius: 5%;
   overflow: hidden;
-  padding-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .twitter-card .text {

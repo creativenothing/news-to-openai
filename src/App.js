@@ -6,13 +6,13 @@ import Content from './components/Content'
 const App = () => {
   return (
     <Router>
-      <main className="container-fluid">
-        <Navbar />
+      <Navbar />
+      <main>
         <Content />
-        <footer>
-          &#9398; <small>anti-copyright</small>
-        </footer>
       </main>
+      <footer>
+        &#9398; <small>anti-copyright</small>
+      </footer>
     </Router>
   )
 }
