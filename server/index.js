@@ -1,12 +1,10 @@
 const express = require('express')
-const passport = require('passport')
 const path = require('path')
 const cors = require('cors')
 const logger = require('morgan')
+const port = process.env.PORT || 5000
 
 const twitter = require('./routes/twitter')
-
-const port = process.env.PORT
 
 const app = express()
 
@@ -23,8 +21,6 @@ app.use(
     cookie: { secure: false }
   })
 )
-app.use(passport.initialize())
-app.use(passport.session())
 
 app.use(cors())
 

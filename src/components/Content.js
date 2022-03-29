@@ -60,11 +60,10 @@ const Content = props => {
     })
   }
   const filterByKeywords = keywords => {
-    const keywordArray = keywords.toLowerCase().replace(',', ' ').split(' ')
     const filteredNews = [...newslist].filter(
       n =>
         !n.description ||
-        keywordArray.some(word => !n.description.toLowerCase().includes(word))
+        keywords.some(word => !n.description.toLowerCase().includes(word))
     )
     const filterIds = filteredNews.map(n => n.id)
     setFilters({ keywords: filterIds })

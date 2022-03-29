@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Headline from './Headline'
-
+import { ReactComponent as X } from '../../assets/img/x.svg'
 const SearchBar = props => {
   const { handleChange, handleSubmit, search } = props
 
@@ -19,13 +19,21 @@ const SearchBar = props => {
 
 const HeadlineFilter = props => {
   const { filterByKeywords, clearFilter } = props
+  const [keywords, setKeywords] = useState([])
   const [search, setSearch] = useState('')
 
   const handleChange = e => setSearch(e.target.value)
   const handleSubmit = e => {
     e.preventDefault()
-    filterByKeywords(search)
+    const keywordArray = search.toLowerCase().replace(',', ' ').split(' ')
+    setKeywords(keywordArray)
+    filterByKeywords(keywordArray)
     setSearch('')
+  }
+  const removeKeyword = keyword => {
+    const newKeywords = [...keywords].filter(k => k !== keyword)
+    filterByKeywords(newKeywords)
+    setKeywords(newKeywords)
   }
   return (
     <div
@@ -34,22 +42,17 @@ const HeadlineFilter = props => {
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
-      <SearchBar handleChange={handleChange} handleSubmit={handleSubmit} />
-      <span role="button" className="secondary outline" onClick={clearFilter}>
-        all
-      </span>
-      <span
-        role="button"
-        className="secondary outline"
-        onClick={() => filterByKeywords('covid')}>
-        covid
-      </span>
-      <span
-        role="button"
-        className="secondary outline"
-        onClick={() => filterByKeywords('ukraine')}>
-        ukraine
-      </span>
+      <SearchBar
+        search={search}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+      />
+      {keywords.map(k => (
+        <span role="button" className="secondary outline" key={k}>
+          {k}
+          <X onClick={() => removeKeyword(k)} />
+        </span>
+      ))}
     </div>
   )
 }

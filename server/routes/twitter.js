@@ -6,6 +6,7 @@ const appKey = process.env.appKey
 const appSecret = process.env.appSecret
 const accessToken = process.env.accessToken
 const accessSecret = process.env.accessTokenSecret
+const userId = process.env.userId
 
 const buildClient = () =>
   new TwitterApi({
@@ -17,12 +18,31 @@ const buildClient = () =>
   })
 
 const client = buildClient()
-router.get('/', (req, res) => {
+
+const getMe = () => {
   client.v2
     .me()
-    .then(resp => res.send(resp))
+    .then(res => console.log(res))
     .catch(err => console.log(err))
+}
+
+const getTweets = () => {
+  client.v2
+    .userTimeline(userId, { exclude: 'replies' })
+    .then(res => {
+      console.log(res.tweets)
+    })
+    .catch(err => console.log(err))
+}
+
+router.get('/', (req, res) => {
+  getMe()
 })
+
+router.get('/timeline', (req, res) => {
+  getTweets()
+})
+
 router.post('/', (req, res) => {
   const { tweet } = req.body
   client.v2
@@ -47,8 +67,6 @@ router.post('/meta', (req, res) => {
       const description =
         $('meta[property="og:description"]').attr('content') ||
         $('meta[name="description"]').attr('content')
-      console.log(title)
-      console.log(description)
       res.json({ title, description })
     })
     .catch(err => console.log(err))

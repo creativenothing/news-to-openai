@@ -24,16 +24,9 @@ const Home = props => {
         </a>{' '}
         to generate a selection of tweets from a current news headline.
       </p>
-      <a
-        href="https://twitter.com/inhabit_ai"
-        className="twitter-follow-button"
-        data-show-count="false">
-        Follow @inhabit-ai
-      </a>
-      <script
-        async
-        src="https://platform.twitter.com/widgets.js"
-        charSet="utf-8"></script>
+      <p>
+        Follow me on twitter: <a href="">@inhabit_ai</a>
+      </p>
       <hr />
       <blockquote>
         <em>{quote}</em>
