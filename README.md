@@ -1,17 +1,4 @@
-# tiqqun AI
+# news to openai
 
-TODO
-
-- [ ] fix findElapsedTime
-  - it shows as 0 months ago
-
-- [ ] paginate headline results
-
-- [ ] style feedback for tapping (active highlight)
-
-- [ ] rebrand as situ.ation.ist
-
-- [ ] add modal anmation
-
-- [ ] add loading animations
-
+see the site at https://situ.ation.ist
+see the twitter at https://twitter.com/inhabit_ai

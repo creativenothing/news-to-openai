@@ -1,17 +1,16 @@
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 const Navbar = props => {
   return (
     <nav>
       <ul>
         <li>
-          <h4>inhabit ai</h4>
+          <Link to="/">
+            <h4>situ.ation.ist</h4>
+          </Link>
         </li>
       </ul>
       <ul>
-        <li>
-          <NavLink to="/">home</NavLink>
-        </li>
         <li>
           <NavLink to="/headlines">headlines</NavLink>
         </li>

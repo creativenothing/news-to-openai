@@ -36,7 +36,8 @@ const Home = props => {
         to generate a selection of tweets from a current news headline.
       </p>
       <p>
-        Follow me on twitter: <a href="">@inhabit_ai</a>
+        Follow me on twitter:{' '}
+        <a href="https://twitter.com/insituationist">@insituationist</a>
       </p>
       <Figure />
     </section>
