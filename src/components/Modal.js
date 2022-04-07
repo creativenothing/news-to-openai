@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 
 const Modal = props => {
-  const { isOpen, toggleModal } = props
+  const { className, isOpen, toggleModal } = props
   const dialogRef = useRef(null)
   const articleRef = useRef(null)
 
@@ -29,7 +29,10 @@ const Modal = props => {
 
   return (
     <dialog ref={dialogRef} style={{ overflow: 'hidden' }}>
-      <article ref={articleRef} style={{ width: '90%', overflow: 'hidden' }}>
+      <article
+        className={className}
+        ref={articleRef}
+        style={{ width: '90%', overflow: 'hidden' }}>
         {props.children}
       </article>
     </dialog>

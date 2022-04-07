@@ -3,6 +3,8 @@ import axios from 'axios'
 
 import TweetModal from './TweetModal'
 import TwitterCard from './TwitterCard'
+import { ReactComponent as Twitter } from '../assets/img/twitter.svg'
+import { ReactComponent as Trash } from '../assets/img/trash-2.svg'
 
 const EmptyResults = props => {
   return (
@@ -16,8 +18,33 @@ const EmptyResults = props => {
   )
 }
 
+const Result = props => {
+  const { result, postToTwitter, openTweetDetail, removeFromChoices } = props
+  return (
+    <div className="result">
+      <p>{result.text}</p>
+      <div>
+        <div className="buttons">
+          <span
+            role="button"
+            className="tweet"
+            onClick={() => openTweetDetail(result.index)}>
+            <Twitter />
+          </span>
+          <span
+            role="button"
+            className="remove"
+            onClick={() => removeFromChoices(result.index)}>
+            <Trash />
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
 const OpenAI = props => {
   const [showModal, setShowModal] = useState(false)
+  const [stat, setStat] = useState('unsent')
   const [tweet, setTweet] = useState('')
   const [index, setIndex] = useState(null)
   const [metadata, setMetadata] = useState({})
@@ -37,16 +64,32 @@ const OpenAI = props => {
       setShowModal(true)
     })
   }
-
-  const postToTwitter = tweet => {
+  const clearState = () => {
+    setTweet('')
+    setIndex(null)
+    setMetadata({})
+    setStat('unsent')
+    setShowModal(false)
+  }
+  const postToTwitterDev = tweet => {
+    setMetadata({ link: 'link here in prod', ...metadata })
+    setStat('success')
+  }
+  const postToTwitterProd = tweet => {
     axios
       .post('/twitter', { tweet })
       .then(({ data }) => {
-        setShowModal(false)
-        alert('You posted to twitter:\n\n' + data.text)
+        setMetadata({ link: data.text, ...metadata })
+        setStat('success')
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        setStat('failure')
+      })
   }
+
+  const postToTwitter =
+    process.env.NODE_ENV === 'production' ? postToTwitterProd : postToTwitterDev
   return (
     <section id="results">
       <TwitterCard
@@ -56,20 +99,23 @@ const OpenAI = props => {
         sourceName={article.source.name}
       />
       {choices.map((c, i) => (
-        <div className="result" key={i} onClick={() => openTweetDetail(i)}>
-          {c.text}
-        </div>
+        <Result
+          key={i}
+          result={c}
+          postToTwitter={postToTwitter}
+          removeFromChoices={removeFromChoices}
+          openTweetDetail={openTweetDetail}
+        />
       ))}
       <TweetModal
         isOpen={showModal}
-        toggleModal={setShowModal}
+        toggleModal={() => setShowModal(false)}
         tweet={tweet}
-        index={index}
-        setTweet={setTweet}
+        stat={stat}
         article={article}
         metadata={metadata}
         postToTwitter={postToTwitter}
-        removeFromChoices={removeFromChoices}
+        clearState={clearState}
       />
     </section>
   )

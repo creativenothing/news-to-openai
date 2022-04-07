@@ -8,11 +8,9 @@ const Headline = props => {
       <p>{article.title}</p>
       <div className="info">
         <small>{findElapsedTime(article.publishedAt)}</small>
-        <span
-          style={{ textDecoration: 'underline' }}
-          onClick={() => sendSeed(article.title)}>
+        <a href="#" onClick={() => sendSeed(article.title)}>
           <small>generate tweets</small>
-        </span>
+        </a>
       </div>
     </div>
   )

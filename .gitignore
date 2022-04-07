@@ -27,3 +27,4 @@ yarn-error.log*
 data/
 news.json
 .setenv
+.todo.md

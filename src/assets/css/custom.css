@@ -12,13 +12,14 @@ body {
   flex-direction: column;
   max-width: 800px;
   margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
 nav {
   position: sticky;
   top: 0;
   padding: 0 1rem;
-  --background-color: var(--background-color);
+  background-color: var(--background-color);
 }
 nav a {
   --color: var(--color);
@@ -26,32 +27,31 @@ nav a {
   padding-bottom: 0.5rem;
 }
 
-nav li {
-}
 nav a:active,
-a:hover,
-a:focus {
+nav a:hover,
+nav a:focus {
   --color: var(--color);
 }
 
 nav a:active,
-a:focus {
-  --background-color: var(--background-color);
+nav a:focus {
+  background-color: var(--background-color);
 }
 
 nav a:hover {
-  --background-color: var(--muted-border-color);
+  background-color: var(--muted-border-color);
 }
 
 nav a.active {
   border-bottom: 2px solid;
 }
+
 main {
   flex-grow: 1;
   overflow: auto;
 }
 
-footer {
+#root > footer {
   width: 100%;
   padding: 0.5rem 1rem;
   text-align: right;
@@ -124,16 +124,6 @@ hr {
   margin-top: 6em;
 }
 
-form {
-  display: flex;
-  align-items: center;
-  margin: 0;
-}
-
-article {
-  padding-top: 1em;
-}
-
 svg {
   color: var(--color);
 }
@@ -143,12 +133,15 @@ svg {
   justify-content: space-between;
 }
 
-.headline,
-.result {
+.headline {
   padding: 1.5rem 0.5rem;
   border-bottom: 1px solid var(--muted-color);
 }
 
+.result {
+  padding: 1.5rem 0.5rem;
+  border-bottom: 1px solid var(--muted-color);
+}
 .result:active,
 .result:hover,
 .headline:active,
@@ -160,15 +153,39 @@ svg {
   overflow: hidden;
 }
 
-.twitter-modal .buttons {
-  margin-top: 2rem;
+.buttons {
   display: flex;
-  justify-content: space-around;
-  flex-direction: flex-end;
-  align-items: center;
+  justify-content: right;
+  gap: 3rem;
+}
+.buttons svg {
+  padding: 0.1rem;
+  color: var(--muted-color);
 }
 
-.twitter-modal .close {
+.buttons span {
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+}
+.buttons span:focus {
+  box-shadow: none;
+}
+.buttons span.tweet:hover {
+  background-color: var(--primary-focus);
+}
+.buttons span.remove:hover {
+  background-color: var(--form-element-invalid-focus-color);
+}
+.buttons span.remove:hover svg {
+  color: var(--form-element-invalid-border-color);
+}
+
+.buttons span.tweet:hover svg {
+  color: var(--primary);
+}
+
+*/ .buttons .twitter-modal .close {
   float: right;
   align-self: start;
 }
@@ -193,6 +210,10 @@ svg {
   margin-bottom: 1rem;
 }
 
+.twitter-card img {
+  width: 100%;
+  object-fit: cover;
+}
 .twitter-card .text {
   padding: 0.5rem;
 }
