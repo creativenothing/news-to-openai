@@ -1,34 +1,26 @@
 import React, { useEffect, useRef } from 'react'
 
 const Modal = props => {
-  const { className, isOpen, toggleModal } = props
+  const { className, isOpen, closeModal } = props
   const dialogRef = useRef(null)
   const articleRef = useRef(null)
-
-  const click = e => {
-    if (!articleRef.current.contains(e.target)) {
-      closeModal()
-    }
+  const handleClick = e => {
+    if (isOpen && !articleRef.current.contains(e.target)) closeModal()
   }
+  const addListener = () =>
+    dialogRef.current.addEventListener('pointerdown', handleClick)
 
+  const removeListener = () => {
+    dialogRef.current &&
+      dialogRef.current.removeEventListener('pointerdown', handleClick)
+  }
   useEffect(() => {
-    if (!dialogRef.current.open && isOpen) {
-      dialogRef.current.showModal()
-      document.addEventListener('mousedown', click)
-    }
-    if (dialogRef.current.open && !isOpen) {
-      closeModal()
-    }
-  })
-
-  const closeModal = () => {
-    document.removeEventListener('mousedown', click)
-    dialogRef.current.close()
-    toggleModal(false)
-  }
+    if (isOpen) addListener()
+    return () => removeListener()
+  }, [isOpen])
 
   return (
-    <dialog ref={dialogRef} style={{ overflow: 'hidden' }}>
+    <dialog open={isOpen} ref={dialogRef} style={{ overflow: 'hidden' }}>
       <article
         className={className}
         ref={articleRef}

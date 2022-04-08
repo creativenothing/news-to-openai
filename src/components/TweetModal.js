@@ -8,7 +8,7 @@ const TweetModal = props => {
   const {
     tweet,
     isOpen,
-    toggleModal,
+    closeModal,
     postToTwitter,
     article,
     metadata,
@@ -17,7 +17,7 @@ const TweetModal = props => {
   } = props
 
   return (
-    <Modal className={'tweet-modal'} isOpen={isOpen} toggleModal={toggleModal}>
+    <Modal className={'tweet-modal'} isOpen={isOpen} closeModal={closeModal}>
       <div className="tweet">
         <p>{tweet}</p>
         <p>
@@ -42,13 +42,10 @@ const TweetModal = props => {
           <SuccessOrFail
             success={stat === 'success'}
             link={metadata.link}
-            handleClose={stat === 'success' ? clearState : toggleModal}
+            handleClose={stat === 'success' ? clearState : closeModal}
           />
         ) : (
-          <PostOrDelete
-            postToTwitter={postToTwitter}
-            toggleModal={toggleModal}
-          />
+          <PostOrDelete postToTwitter={postToTwitter} closeModal={closeModal} />
         )}
       </footer>
     </Modal>
@@ -56,13 +53,13 @@ const TweetModal = props => {
 }
 
 const PostOrDelete = props => {
-  const { postToTwitter, toggleModal } = props
+  const { postToTwitter, closeModal } = props
 
   return (
     <div className="buttons">
       <p>Post to Twitter?</p>
       <Yes onClick={postToTwitter} />
-      <No onClick={toggleModal} />
+      <No onClick={closeModal} />
     </div>
   )
 }

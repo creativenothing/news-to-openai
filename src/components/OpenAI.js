@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, Fragment } from 'react'
 import axios from 'axios'
 
 import TweetModal from './TweetModal'
@@ -19,7 +19,7 @@ const EmptyResults = props => {
 }
 
 const Result = props => {
-  const { result, postToTwitter, openTweetDetail, removeFromChoices } = props
+  const { result, openTweetDetail, removeFromChoices } = props
   return (
     <div className="result">
       <p>{result.text}</p>
@@ -48,6 +48,8 @@ const OpenAI = props => {
   const [tweet, setTweet] = useState('')
   const [index, setIndex] = useState(null)
   const [metadata, setMetadata] = useState({})
+  const secRef = useRef(null)
+
   const { article, choices, removeFromChoices } = props
 
   if (choices.length < 1) return <EmptyResults />
@@ -55,13 +57,31 @@ const OpenAI = props => {
   const fetchMetadata = url =>
     axios.post('/twitter/meta', { url }).then(({ data }) => data)
 
+  const aniTime = 400
+
+  const openModal = () => {
+    secRef.current.classList.add('modal-is-opening')
+    setTimeout(
+      () => secRef.current.classList.remove('modal-is-opening'),
+      aniTime
+    )
+    setShowModal(true)
+  }
+
+  const closeModal = () => {
+    secRef.current.classList.add('modal-is-closing')
+    setTimeout(() => {
+      secRef.current.classList.remove('modal-is-closing')
+      setShowModal(false)
+    }, aniTime)
+  }
   const openTweetDetail = index => {
     const choice = choices.find(c => c.index === index)
     setTweet(choice.text)
     setIndex(choice.index)
     fetchMetadata(article.url).then(res => {
       setMetadata(res)
-      setShowModal(true)
+      openModal()
     })
   }
   const clearState = () => {
@@ -69,10 +89,10 @@ const OpenAI = props => {
     setIndex(null)
     setMetadata({})
     setStat('unsent')
-    setShowModal(false)
+    closeModal()
   }
   const postToTwitterDev = tweet => {
-    setMetadata({ link: 'link here in prod', ...metadata })
+    setMetadata({ link: '/', ...metadata })
     setStat('success')
   }
   const postToTwitterProd = tweet => {
@@ -90,8 +110,40 @@ const OpenAI = props => {
 
   const postToTwitter =
     process.env.NODE_ENV === 'production' ? postToTwitterProd : postToTwitterDev
+  if (choices.length < 1) return <EmptyResults />
   return (
-    <section id="results">
+    <section ref={secRef} id="results">
+      <ResultsList
+        choices={choices}
+        article={article}
+        postToTwitter={postToTwitter}
+        removeFromChoices={removeFromChoices}
+        openTweetDetail={openTweetDetail}
+      />
+      <TweetModal
+        isOpen={showModal}
+        closeModal={closeModal}
+        tweet={tweet}
+        stat={stat}
+        article={article}
+        metadata={metadata}
+        postToTwitter={postToTwitter}
+        clearState={clearState}
+      />
+    </section>
+  )
+}
+
+const ResultsList = props => {
+  const {
+    article,
+    choices,
+    postToTwitter,
+    removeFromChoices,
+    openTweetDetail
+  } = props
+  return (
+    <Fragment>
       <TwitterCard
         title={article.title}
         description={article.content}
@@ -107,18 +159,7 @@ const OpenAI = props => {
           openTweetDetail={openTweetDetail}
         />
       ))}
-      <TweetModal
-        isOpen={showModal}
-        toggleModal={() => setShowModal(false)}
-        tweet={tweet}
-        stat={stat}
-        article={article}
-        metadata={metadata}
-        postToTwitter={postToTwitter}
-        clearState={clearState}
-      />
-    </section>
+    </Fragment>
   )
 }
-
 export default OpenAI
