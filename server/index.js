@@ -2,17 +2,15 @@ const express = require('express')
 const path = require('path')
 const cors = require('cors')
 const logger = require('morgan')
-const port = process.env.PORT || 5000
 
-const PUBLIC_PATH = path.join(__dirname, '..', 'build')
-const twitter = require('./routes/twitter')
+const BUILD_PATH = path.join(__dirname, '..', 'build')
+const port = process.env.PORT || 5000
 
 const app = express()
 
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(
   require('express-session')({
@@ -25,11 +23,12 @@ app.use(
 
 app.use(cors())
 
-app.use('/twitter', twitter)
+app.use('/twitter', require('./routes/twitter'))
 
-app.use(express.static(PUBLIC_PATH))
+app.use(express.static(BUILD_PATH))
+
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(PUBLIC_PATH, 'index.html'))
+  res.sendFile(path.join(BUILD_PATH, 'index.html'))
 })
 
 app.listen(port, () => {
