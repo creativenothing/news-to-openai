@@ -7,14 +7,14 @@ import Loading from './Loading'
 import { fetchNews, sortByDate, fetchOpenAI } from '../utils'
 
 const Error = props => {
-  const { setComponent } = props
+  const navigate = useNavigate()
   return (
     <dialog open>
       <article>
-        <div
+        <button
           aria-label="Close"
           className="close"
-          onClick={() => setComponent('home')}></div>
+          onClick={() => navigate('/')}></button>
         <p>Something went wrong. Please try again.</p>
       </article>
     </dialog>
@@ -22,15 +22,25 @@ const Error = props => {
 }
 
 const Content = props => {
+  const [loading, setLoading] = useState(false)
   const [newslist, setNewslist] = useState([])
   const [seed, setSeed] = useState('')
   const [choices, setChoices] = useState([])
   const [filters, setFilters] = useState({ keywords: [] })
+
   const navigate = useNavigate()
 
+  const fetchDelay = process.env.NODE_ENV === 'development' ? 2000 : 0
+
   useEffect(() => {
-    fetchNews().then(newslist => setNewslist(sortByDate(newslist)))
-  }, [])
+    setLoading(true)
+    setTimeout(() => {
+      fetchNews().then(newslist => {
+        setNewslist(sortByDate(newslist))
+        setLoading(false)
+      })
+    }, fetchDelay)
+  }, [setLoading])
 
   const handleError = err => {
     navigate('/error')
@@ -38,16 +48,19 @@ const Content = props => {
   }
   const sendSeed = seed => {
     setSeed(seed)
-    navigate('/loading')
-    fetchOpenAI(seed).then(({ data, error }) => {
-      if (error) handleError(error)
-      else {
-        setChoices(
-          data.choices.map(c => ({ text: c.text.trim(), index: c.index }))
-        )
-        navigate('/results')
-      }
-    })
+    setLoading(true)
+    setTimeout(() => {
+      fetchOpenAI(seed).then(({ data, error }) => {
+        if (error) handleError(error)
+        else {
+          setChoices(
+            data.choices.map(c => ({ text: c.text.trim(), index: c.index }))
+          )
+          navigate('/results')
+          setLoading(false)
+        }
+      })
+    }, fetchDelay)
   }
   const filterByKeywords = keywords => {
     const filteredNews = [...newslist].filter(
@@ -82,6 +95,7 @@ const Content = props => {
             headlineFilter={headlineFilter}
             newslist={filter(newslist)}
             sendSeed={sendSeed}
+            loading={loading}
           />
         }
       />
@@ -93,6 +107,7 @@ const Content = props => {
             seed={seed}
             choices={choices}
             removeFromChoices={removeFromChoices}
+            loading={loading}
           />
         }
       />

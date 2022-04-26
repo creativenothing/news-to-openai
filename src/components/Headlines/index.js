@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Headline from './Headline'
+import Loading from '../Loading'
 import { ReactComponent as X } from '../../assets/img/x.svg'
 
 const SearchBar = props => {
@@ -19,7 +20,7 @@ const SearchBar = props => {
 }
 
 const HeadlineFilter = props => {
-  const { filterByKeywords } = props
+  const { loading, filterByKeywords } = props
   const [keywords, setKeywords] = useState([])
   const [search, setSearch] = useState('')
 
@@ -36,6 +37,7 @@ const HeadlineFilter = props => {
     filterByKeywords(newKeywords)
     setKeywords(newKeywords)
   }
+
   return (
     <div
       style={{
@@ -63,7 +65,10 @@ const HeadlineFilter = props => {
 }
 
 const Headlines = props => {
-  const { newslist, headlineFilter } = props
+  const { loading, newslist, headlineFilter } = props
+  console.log('Headling loading?', loading)
+  if (loading) return <Loading />
+
   return (
     <React.Fragment>
       <div id="headlines">

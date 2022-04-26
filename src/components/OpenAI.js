@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import TweetModal from './TweetModal'
 import TwitterCard from './TwitterCard'
+import Loading from './Loading'
 import { ReactComponent as Twitter } from '../assets/img/twitter.svg'
 import { ReactComponent as Trash } from '../assets/img/trash-2.svg'
 
@@ -50,10 +51,8 @@ const OpenAI = props => {
   const [metadata, setMetadata] = useState({})
   const secRef = useRef(null)
 
-  const { article, choices, removeFromChoices } = props
-
-  if (choices.length < 1) return <EmptyResults />
-
+  const { loading, article, choices, removeFromChoices } = props
+  console.log(loading)
   const fetchMetadata = url =>
     axios.post('/twitter/meta', { url }).then(({ data }) => data)
 
@@ -110,6 +109,8 @@ const OpenAI = props => {
 
   const postToTwitter =
     process.env.NODE_ENV === 'production' ? postToTwitterProd : postToTwitterDev
+
+  if (loading) return <Loading />
   if (choices.length < 1) return <EmptyResults />
   return (
     <section ref={secRef} id="results">
