@@ -185,7 +185,7 @@ svg {
   color: var(--primary);
 }
 
-*/ .buttons .twitter-modal .close {
+.buttons .twitter-modal .close {
   float: right;
   align-self: start;
 }
