@@ -17,16 +17,12 @@ const Content = props => {
 
   const navigate = useNavigate()
 
-  const fetchDelay = process.env.NODE_ENV === 'development' ? 2000 : 0
-
   useEffect(() => {
     setLoading(true)
-    setTimeout(() => {
-      fetchNews().then(newslist => {
-        setNewslist(sortByDate(newslist))
-        setLoading(false)
-      })
-    }, fetchDelay)
+    fetchNews().then(newslist => {
+      setNewslist(sortByDate(newslist))
+      setLoading(false)
+    })
   }, [setLoading])
 
   const handleError = err => {
@@ -36,18 +32,16 @@ const Content = props => {
   const sendSeed = seed => {
     setSeed(seed)
     setLoading(true)
-    setTimeout(() => {
-      fetchOpenAI(seed).then(({ data, error }) => {
-        if (error) handleError(error)
-        else {
-          setChoices(
-            data.choices.map(c => ({ text: c.text.trim(), index: c.index }))
-          )
-          navigate('/results')
-          setLoading(false)
-        }
-      })
-    }, fetchDelay)
+    fetchOpenAI(seed).then(({ data, error }) => {
+      if (error) handleError(error)
+      else {
+        setChoices(
+          data.choices.map(c => ({ text: c.text.trim(), index: c.index }))
+        )
+        navigate('/results')
+        setLoading(false)
+      }
+    })
   }
   const filterByKeywords = keywords => {
     const filteredNews = [...newslist].filter(
