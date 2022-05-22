@@ -1,25 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import Home from './Home'
+import Error from './Error'
 import Headlines, { HeadlineFilter } from './Headlines'
 import OpenAI from './OpenAI'
 import Loading from './Loading'
+import Dev from './Dev'
 import { fetchNews, sortByDate, fetchOpenAI } from '../utils'
-
-const Error = props => {
-  const navigate = useNavigate()
-  return (
-    <dialog open>
-      <article>
-        <button
-          aria-label="Close"
-          className="close"
-          onClick={() => navigate('/')}></button>
-        <p>Something went wrong. Please try again.</p>
-      </article>
-    </dialog>
-  )
-}
 
 const Content = props => {
   const [loading, setLoading] = useState(false)
