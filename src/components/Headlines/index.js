@@ -66,7 +66,6 @@ const HeadlineFilter = props => {
 
 const Headlines = props => {
   const { loading, newslist, headlineFilter } = props
-  console.log('Headling loading?', loading)
   if (loading) return <Loading />
 
   return (
