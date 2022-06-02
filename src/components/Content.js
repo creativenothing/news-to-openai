@@ -5,7 +5,7 @@ import Error from './Error'
 import Headlines, { HeadlineFilter } from './Headlines'
 import OpenAI from './OpenAI'
 import Loading from './Loading'
-import { fetchNews, sortByDate, fetchOpenAI } from '../utils'
+import { fetchNews, fetchOpenAI } from '../utils'
 
 const Content = props => {
   const [loading, setLoading] = useState(false)
@@ -19,7 +19,7 @@ const Content = props => {
   useEffect(() => {
     setLoading(true)
     fetchNews().then(newslist => {
-      setNewslist(sortByDate(newslist))
+      setNewslist(newslist)
       setLoading(false)
     })
   }, [setLoading])
