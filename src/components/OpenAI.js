@@ -82,23 +82,23 @@ const OpenAI = props => {
     setStat('unsent')
     closeModal()
   }
-  const postToTwitterDev = tweet => setStat('success')
+  const postToTwitterDev = () => setStat('success')
 
   const postToTwitterProd = tweet => {
     axios
       .post('/twitter', { tweet })
-      .then(({ data }) => {
-        setStat('success')
-      })
+      .then(() => setStat('success'))
       .catch(err => {
         console.log(err)
         setStat('failure')
       })
   }
 
-  const postToTwitter = postToTwitterProd
+  const postToTwitter =
+    process.env.NODE_ENV === 'production' ? postToTwitterProd : postToTwitterDev
 
   if (loading) return <Loading />
+
   if (choices.length < 1) return <EmptyResults />
   return (
     <section ref={secRef} id="results">
