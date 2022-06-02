@@ -14,12 +14,12 @@ const axios = require('axios')
 const slugify = require('react-slugify').default
 
 const NEWS_API_PATH = 'https://newsapi.org/v2/top-headlines'
-const NEWS_API_KEY = process.env.REACT_APP_NEWSAPI_KEY
+const NEWSAPI_KEY = process.env.NEWSAPI_KEY
 
 const sources =
   'abc-news,al-jazeera-english,associated-press,axios,bbc-news,breitbart,cbc-news,cnn,fox-news,google-news,msnbc,national-review,nbc-news,newsweek,politico,reuters,the-american-conservative,the-hill,the-washington-post,usa-today,vice-news'
 
-const headers = { 'x-api-key': NEWS_API_KEY }
+const headers = { 'x-api-key': NEWSAPI_KEY }
 
 const defaultParams = {
   language: 'en',
@@ -29,11 +29,34 @@ const defaultParams = {
 
 const DATADIR = path.resolve(__dirname, '../data/news/')
 const NEWSFILEPATH = path.resolve(__dirname, '../public/news.json')
-let id = fs.readdirSync(__dirname + '/../data/news').length + 1
+let id = fs.readdirSync(DATADIR).length + 1
 
 console.log('data directory: ' + DATADIR)
 console.log('newsfile path: ' + NEWSFILEPATH)
 console.log('number of existing articles: ' + id)
+
+const fetchMetadata = article => {
+  const url = article.url
+  return axios
+    .post('http://localhost:5000/twitter/meta', { url })
+    .then(({ data }) => {
+      const { title, description } = data
+      article.title = title
+      article.description = description
+      return article
+    })
+    .catch(e => article)
+}
+
+const fetchHeadlinesDebug = () => {
+  const response = JSON.parse(
+    fs.readFileSync(path.resolve('./', 'response.json'))
+  )
+  console.log('opened ' + response.articles.length + ' articles.')
+  return new Promise((resolve, reject) => {
+    return response.articles
+  })
+}
 
 const fetchHeadlines = sentParams => {
   const params = { ...defaultParams, ...sentParams }
@@ -44,21 +67,28 @@ const fetchHeadlines = sentParams => {
       console.log('Retrieved ' + data.articles.length + ' articles. ')
       return data.articles
     })
-    .catch(err => console.log(err))
+    .catch(err => console.log(err.message))
 }
 
 const saveArticle = article => {
-  article.id = id
-  id++
-  const slug = slugify(article.title)
-  const filepath = path.resolve(DATADIR, slug + '.json')
-  fs.writeFileSync(filepath, JSON.stringify(article))
+  fetchMetadata(article)
+    .then(newArticle => {
+      newArticle.id = id
+      id++
+      const slug = slugify(newArticle.title)
+      const filepath = path.resolve(DATADIR, slug + '.json')
+      fs.writeFileSync(filepath, JSON.stringify(newArticle))
+    })
+    .catch(err => console.log(err.message))
 }
 
 const downloadAllHeadlines = () =>
   fetchHeadlines()
-    .then(articles => articles.forEach(a => saveArticle(a)))
-    .catch(e => console.log(e))
+    .then(articles => articles)
+    .catch(err => console.log(err.message))
+
+const saveAllArticles = articles =>
+  new Promise(resolve => resolve(articles.forEach(a => saveArticle(a))))
 
 writeNewsFileFromDir = () => {
   const filenames = fs.readdirSync(DATADIR)
@@ -84,13 +114,11 @@ const fixIds = () => {
       return JSON.stringify(a)
     })
     .join(',')
-
-  console.log(articles)
   fs.writeFileSync(NEWSFILEPATH, '[')
   fs.writeFileSync(NEWSFILEPATH, articles, { flag: 'a' })
   fs.writeFileSync(NEWSFILEPATH, ']', { flag: 'a' })
 }
 
-//fixIds()
-//writeNewsFileFromDir()
-downloadAllHeadlines().then(() => writeNewsFileFromDir())
+downloadAllHeadlines().then(articles => {
+  saveAllArticles(articles).then(() => writeNewsFileFromDir())
+})

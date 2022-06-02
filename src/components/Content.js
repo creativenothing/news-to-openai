@@ -5,7 +5,6 @@ import Error from './Error'
 import Headlines, { HeadlineFilter } from './Headlines'
 import OpenAI from './OpenAI'
 import Loading from './Loading'
-import Dev from './Dev'
 import { fetchNews, sortByDate, fetchOpenAI } from '../utils'
 
 const Content = props => {

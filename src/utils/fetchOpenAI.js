@@ -30,7 +30,7 @@ const fetchOpenAIProd = seed => {
 
 const fetchOpenAIDev = () =>
   new Promise(resolve => resolve({ data: openairequest }))
-const fetchOpenAI =
-  process.env.NODE_ENV === 'production' ? fetchOpenAIProd : fetchOpenAIDev
+
+const fetchOpenAI = fetchOpenAIProd
 
 export default fetchOpenAI

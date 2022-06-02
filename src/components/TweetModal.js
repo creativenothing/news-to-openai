@@ -4,6 +4,8 @@ import TwitterCard from './TwitterCard'
 import { ReactComponent as Yes } from '../assets/img/check-circle.svg'
 import { ReactComponent as No } from '../assets/img/x-circle.svg'
 
+const link = 'https://twitter.com/insituationist'
+
 const TweetModal = props => {
   const {
     tweet,
@@ -11,7 +13,6 @@ const TweetModal = props => {
     closeModal,
     postToTwitter,
     article,
-    metadata,
     stat,
     clearState
   } = props
@@ -34,18 +35,21 @@ const TweetModal = props => {
       <TwitterCard
         urlToImage={article.urlToImage}
         sourceName={article.source.name}
-        title={metadata.title}
-        description={metadata.description}
+        title={article.title}
+        description={article.description}
       />
       <footer>
         {stat === 'success' || stat === 'fail' ? (
           <SuccessOrFail
             success={stat === 'success'}
-            link={metadata.link}
+            link={link}
             handleClose={stat === 'success' ? clearState : closeModal}
           />
         ) : (
-          <PostOrDelete postToTwitter={postToTwitter} closeModal={closeModal} />
+          <PostOrDelete
+            postToTwitter={() => postToTwitter(`${tweet}\n\n${article.url}`)}
+            closeModal={closeModal}
+          />
         )}
       </footer>
     </Modal>
@@ -65,13 +69,13 @@ const PostOrDelete = props => {
 }
 
 const SuccessOrFail = props => {
-  const { success, handleClose, link } = props
+  const { success, handleClose } = props
   return (
     <div className="buttons">
       {success ? (
         <p>
           Success!{' '}
-          <a href={link} target="_blank" rel="noopener noreferrer">
+          <a href={link} target="_blank" rel="noreferrer">
             View tweet
           </a>
           .

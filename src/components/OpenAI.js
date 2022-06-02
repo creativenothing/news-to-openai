@@ -48,13 +48,9 @@ const OpenAI = props => {
   const [stat, setStat] = useState('unsent')
   const [tweet, setTweet] = useState('')
   const [index, setIndex] = useState(null)
-  const [metadata, setMetadata] = useState({})
   const secRef = useRef(null)
 
   const { loading, article, choices, removeFromChoices } = props
-  console.log(loading)
-  const fetchMetadata = url =>
-    axios.post('/twitter/meta', { url }).then(({ data }) => data)
 
   const aniTime = 400
 
@@ -78,27 +74,20 @@ const OpenAI = props => {
     const choice = choices.find(c => c.index === index)
     setTweet(choice.text)
     setIndex(choice.index)
-    fetchMetadata(article.url).then(res => {
-      setMetadata(res)
-      openModal()
-    })
+    openModal()
   }
   const clearState = () => {
     setTweet('')
     setIndex(null)
-    setMetadata({})
     setStat('unsent')
     closeModal()
   }
-  const postToTwitterDev = tweet => {
-    setMetadata({ link: '/', ...metadata })
-    setStat('success')
-  }
+  const postToTwitterDev = tweet => setStat('success')
+
   const postToTwitterProd = tweet => {
     axios
       .post('/twitter', { tweet })
       .then(({ data }) => {
-        setMetadata({ link: data.text, ...metadata })
         setStat('success')
       })
       .catch(err => {
@@ -107,8 +96,7 @@ const OpenAI = props => {
       })
   }
 
-  const postToTwitter =
-    process.env.NODE_ENV === 'production' ? postToTwitterProd : postToTwitterDev
+  const postToTwitter = postToTwitterProd
 
   if (loading) return <Loading />
   if (choices.length < 1) return <EmptyResults />
@@ -117,7 +105,6 @@ const OpenAI = props => {
       <ResultsList
         choices={choices}
         article={article}
-        postToTwitter={postToTwitter}
         removeFromChoices={removeFromChoices}
         openTweetDetail={openTweetDetail}
       />
@@ -127,7 +114,6 @@ const OpenAI = props => {
         tweet={tweet}
         stat={stat}
         article={article}
-        metadata={metadata}
         postToTwitter={postToTwitter}
         clearState={clearState}
       />
