@@ -28,7 +28,10 @@ const defaultParams = {
 }
 
 const DATADIR = path.resolve(__dirname, '../data/news/')
-const NEWSFILEPATH = path.resolve(__dirname, '../public/news.json')
+const NEWSFILEPATH =
+  process.env.NODE_ENV === 'production'
+    ? path.resolve(__dirname, '../build/news.json')
+    : path.resolve(__dirname, '../public/news.json')
 let id = fs.readdirSync(DATADIR).length + 1
 
 console.log('data directory: ' + DATADIR)
