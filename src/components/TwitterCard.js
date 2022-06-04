@@ -1,8 +1,12 @@
 const TwitterCard = props => {
-  const { urlToImage, sourceName, title, description } = props
+  const { url, urlToImage, sourceName, title, description } = props
+
+  const openUrl = () => window.open(url, '_blank').focus()
+
   return (
-    <div className="twitter-card">
+    <div className="twitter-card" onClick={openUrl}>
       <img src={urlToImage} alt="" />
+
       <div className="text">
         <small>{sourceName}</small>
         <div className="title">{title}</div>

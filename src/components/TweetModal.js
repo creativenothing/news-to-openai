@@ -33,6 +33,7 @@ const TweetModal = props => {
         <p />
       </div>
       <TwitterCard
+        url={article.url}
         urlToImage={article.urlToImage}
         sourceName={article.source.name}
         title={article.title}

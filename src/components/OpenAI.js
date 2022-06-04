@@ -129,9 +129,11 @@ const ResultsList = props => {
     removeFromChoices,
     openTweetDetail
   } = props
+
   return (
     <Fragment>
       <TwitterCard
+        url={article.url}
         title={article.title}
         description={article.content}
         urlToImage={article.urlToImage}
